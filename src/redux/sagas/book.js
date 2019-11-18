@@ -1,7 +1,7 @@
 import { all, call, put, take, takeLatest, select } from 'redux-saga/effects';
-import request from 'utils/request';
-import { actions, types } from 'reducers/book';
-import { getBookChapter } from 'selectors/book';
+import request from '../../utils/request';
+import { actions, types } from '../reducers/book';
+import { getBookChapter } from '../selectors/book';
 
 function* requestChapterWorker({ user }) {
 

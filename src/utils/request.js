@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { buildUrl } from 'utils';
+import { buildUrl } from '../utils';
 import { call, race, delay } from 'redux-saga/effects';
 
 /**

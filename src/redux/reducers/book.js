@@ -1,4 +1,4 @@
-import { buildActions } from 'utils';
+import { buildActions } from '../../utils';
 
 export const types = buildActions('book', [
   'REQUEST_CHAPTER',
