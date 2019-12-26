@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Header from "./Header";
 import Home from "../pages/Home";
+import Bible from "../pages/Bible";
 import PopOver from "../pages/PopOver";
 import NotFound from "../pages/NotFound";
 
@@ -17,6 +18,7 @@ export class App extends Component {
         <Header />
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/bible" component={Bible} />
           <Route exact path="/popover" component={PopOver} />
           <Route component={NotFound} />
         </Switch>

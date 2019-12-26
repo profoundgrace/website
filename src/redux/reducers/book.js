@@ -6,14 +6,14 @@ export const types = buildActions('book', [
   'REQUEST_CHAPTER_FAILURE'
 ]);
 
-const requestChapter = user => ({
+const requestChapter = chapter => ({
   type: types.REQUEST_CHAPTER,
-  user
+  chapter
 });
 
-const requestChapterSuccess = profile => ({
+const requestChapterSuccess = chapter => ({
   type: types.REQUEST_CHAPTER_SUCCESS,
-  profile
+  chapter
 });
 
 const requestChapterFailure = error => ({
@@ -37,9 +37,8 @@ export const reducer = (state = initialState, action = {}) => {
     case types.REQUEST_CHAPTER_SUCCESS:
       return {
         ...state,
-        cache: action.profile.cache,
-        collection: action.profile.request,
-        currentUser: action.profile.currentUser
+        cache: action.chapter.cache,
+        collection: action.chapter.request
       };
     case types.REQUEST_CHAPTER_FAILURE:
       return {

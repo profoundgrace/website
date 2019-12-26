@@ -1,13 +1,13 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 import request from '../../utils/request';
-import { actions, types } from '../reducers/book';
-//import { getBookChapter } from '../selectors/book';
+import { actions, types } from '../reducers/books';
+//import { getBooks } from '../selectors/books';
 
-function* requestChapterWorker({ bid, cid }) {
+function* requestBooksWorker() {
   try {
     let endpoint = {};
     endpoint = {
-      url: '/pfg/book/2/1',
+      url: '/pfg/books',
       method: 'GET'
     };
     const bible = yield call(request.execute, { endpoint });
@@ -16,31 +16,27 @@ function* requestChapterWorker({ bid, cid }) {
       const {
         response: { data }
       } = bible;
-      const response = {
-        cache: data,
-        request: data
-      }
-      yield put(actions.requestChapterSuccess(response));
+      yield put(actions.requestBooksSuccess(data));
     } else if (bible.error) {
       throw bible.error;
     } else {
-      throw new Error('Failed to fetch Bible Chapter!');
+      throw new Error('Failed to fetch Bible Books!');
     }
   } catch (error) {
-    yield put(actions.requestChapterFailure(error));
+    yield put(actions.requestBooksFailure(error));
   }
 }
 
-function* requestChapterWatcher() {
-  yield takeLatest(types.REQUEST_CHAPTER, requestChapterWorker);
+function* requestBooksWatcher() {
+  yield takeLatest(types.REQUEST_BOOKS, requestBooksWorker);
 }
 
 export const workers = {
-  requestChapterWorker
+  requestBooksWorker
 };
 
 export const watchers = {
-  requestChapterWatcher
+  requestBooksWatcher
 };
 
 export default function* saga() {
