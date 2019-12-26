@@ -24,7 +24,7 @@ export function buildActions(reducer, actions) {
  */
 export const buildUrl = endpoint => {
   // this is defined by webpack.DefinePlugin
-  const baseUrl = process.env.API_URL || 'localhost';
+  const baseUrl = process.env.REACT_APP_API_URL || 'localhost';
   const { url, params } = endpoint;
 
   if (!params) {
