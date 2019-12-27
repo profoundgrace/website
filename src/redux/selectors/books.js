@@ -6,3 +6,8 @@ export const getBooks = createSelector(
   getKJVBooks,
   books => books.collection
 );
+
+export const getBooksCache = createSelector(
+  getKJVBooks,
+  books => books.cache
+);

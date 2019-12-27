@@ -5,23 +5,27 @@ import { actions, types } from '../reducers/books';
 
 function* requestBooksWorker() {
   try {
-    let endpoint = {};
-    endpoint = {
-      url: '/pfg/books',
-      method: 'GET'
-    };
-    const bible = yield call(request.execute, { endpoint });
+    //const books = yield select(getBooks);
+    
+      let endpoint = {};
+      endpoint = {
+        url: '/pfg/books',
+        method: 'GET'
+      };
+      const bible = yield call(request.execute, { endpoint });
 
-    if (bible.success) {
-      const {
-        response: { data }
-      } = bible;
-      yield put(actions.requestBooksSuccess(data));
-    } else if (bible.error) {
-      throw bible.error;
-    } else {
-      throw new Error('Failed to fetch Bible Books!');
-    }
+      if (bible.success) {
+        const {
+          response: { data }
+        } = bible;
+
+        yield put(actions.requestBooksSuccess(data));
+      } else if (bible.error) {
+        throw bible.error;
+      } else {
+        throw new Error('Failed to fetch Bible Books!');
+      }
+   
   } catch (error) {
     yield put(actions.requestBooksFailure(error));
   }

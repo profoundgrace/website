@@ -1,13 +1,23 @@
 import { createSelector } from 'reselect';
 
-export const getBook = state => state.book;
+export const getKJVBook = state => state.book;
+
+export const getBook = createSelector(
+  getKJVBook,
+  book => book.collection.book
+);
 
 export const getBookChapter = createSelector(
-  getBook,
-  book => book.collection
+  getKJVBook,
+  book => book.collection.chapter
 );
 
 export const getBookCache = createSelector(
-  getBook,
+  getKJVBook,
   book => book.cache
+);
+
+export const getFormatting = createSelector(
+  getKJVBook,
+  book => book.formatting
 );
