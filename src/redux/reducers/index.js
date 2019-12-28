@@ -8,12 +8,17 @@ import {
   reducer as books,
   initialState as booksState
 } from './books';
+import {
+  reducer as navigator,
+  initialState as navigatorState
+} from './navigator';
 
 export const initialState = {
   book: bookState,
-  books: booksState
+  books: booksState,
+  navigator: navigatorState
 };
 
 export default combineReducers({
-  book, books
+  book, books, navigator
 });

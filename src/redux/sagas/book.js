@@ -1,6 +1,7 @@
 import { all, call, put, takeLatest, select } from 'redux-saga/effects';
 import request from '../../utils/request';
 import { actions, types } from '../reducers/book';
+import { actions as navActions } from '../reducers/navigator';
 import { getBookCache, getChapterCache } from '../selectors/book';
 
 function* requestBookWorker({ book }) {
@@ -24,6 +25,8 @@ function* requestBookWorker({ book }) {
           cache,
           request: data
         }
+        // Populate Navigation
+        yield put(navActions.requestBookNavigator({book:data.bid}));
         yield put(actions.requestBookSuccess(response));
       } else if (bible.error) {
         throw bible.error;
@@ -35,6 +38,8 @@ function* requestBookWorker({ book }) {
         cache,
         request: cache[book]
       }
+      // Populate Navigation
+      yield put(navActions.requestBookNavigator({book:book.bid}));
       yield put(actions.requestBookSuccess(response));
     }
   } catch (error) {
@@ -76,7 +81,12 @@ function* requestChapterWorker({ book, chapter }) {
           cache,
           request: data
         }
-
+        // Populate Navigation
+        if(isNaN(book)){
+          yield put(navActions.requestChapterNavigator({book:data[0].bid, chapter}));
+        } else {
+          yield put(navActions.requestChapterNavigator({book, chapter}));
+        }
         yield put(actions.requestChapterSuccess(response));
       } else if (bible.error) {
         throw bible.error;
@@ -88,7 +98,8 @@ function* requestChapterWorker({ book, chapter }) {
         cache,
         request: cache[book][chapter]
       };
-
+      // Populate Navigation
+      yield put(navActions.requestChapterNavigator({book:cache[book][chapter], chapter}));
       yield put(actions.requestChapterSuccess(response));
     }
   } catch (error) {
