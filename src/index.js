@@ -9,6 +9,7 @@ import { LastLocationProvider } from 'react-router-last-location';
 import rootSaga from './redux/sagas';
 import rootReducer from './redux/reducers';
 
+import './icons';
 import './index.scss';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
