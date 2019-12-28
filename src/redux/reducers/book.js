@@ -50,10 +50,8 @@ export const actions = {
 };
 
 export const initialState = {
-  cache: {
-    book: [],
-    chapter: []
-  },
+  bookCache: {},
+  chapterCache: [],
   collection: {
     book: {},
     chapter: []
@@ -65,9 +63,9 @@ export const reducer = (state = initialState, action = {}) => {
     case types.REQUEST_BOOK_SUCCESS:
       return {
         ...state,
-        cache: {
+        bookCache: {
           ...state.cache,
-          book: action.book.cache
+          ...action.book.cache
         },
         collection: {
           ...state.collection,
@@ -77,9 +75,9 @@ export const reducer = (state = initialState, action = {}) => {
     case types.REQUEST_CHAPTER_SUCCESS:
       return {
         ...state,
-        cache: {
-          ...state.cache,
-          chapter: action.chapter.cache
+        chapterCache: {
+          ...state.chapterCache,
+          ...action.chapter.cache
         },
         collection: {
           ...state.collection,

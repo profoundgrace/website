@@ -11,7 +11,7 @@ import { getBooks } from '../redux/selectors/books';
 export class Bible extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
-    collection: PropTypes.object
+    collection: PropTypes.array
   };
 /*
   constructor(props){

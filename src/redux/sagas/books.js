@@ -1,12 +1,13 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import request from '../../utils/request';
 import { actions, types } from '../reducers/books';
-//import { getBooks } from '../selectors/books';
+import { getBooks } from '../selectors/books';
 
 function* requestBooksWorker() {
   try {
-    //const books = yield select(getBooks);
-    
+    const books = yield select(getBooks);
+
+    if(books.length === 0){
       let endpoint = {};
       endpoint = {
         url: '/pfg/books',
@@ -25,7 +26,7 @@ function* requestBooksWorker() {
       } else {
         throw new Error('Failed to fetch Bible Books!');
       }
-   
+    }
   } catch (error) {
     yield put(actions.requestBooksFailure(error));
   }

@@ -1,13 +1,13 @@
 import { all, call, put, takeLatest, select } from 'redux-saga/effects';
 import request from '../../utils/request';
 import { actions, types } from '../reducers/book';
-import { getBookCache } from '../selectors/book';
+import { getBookCache, getChapterCache } from '../selectors/book';
 
 function* requestBookWorker({ book }) {
   try {
     let cache = yield select(getBookCache);
-    console.log(book);
-    if(!cache.book[book]){
+
+    if(!cache[book]){
       let endpoint = {};
       endpoint = {
         url: `/pfg/book/${book}`,
@@ -19,10 +19,9 @@ function* requestBookWorker({ book }) {
         const {
           response: { data }
         } = bible;
-
-        cache[data.book] = data;
+        cache[book] = data;
         const response = {
-          cache: cache,
+          cache,
           request: data
         }
         yield put(actions.requestBookSuccess(response));
@@ -34,7 +33,7 @@ function* requestBookWorker({ book }) {
     } else {
       const response = {
         cache,
-        request: cache.book[book]
+        request: cache[book]
       }
       yield put(actions.requestBookSuccess(response));
     }
@@ -45,27 +44,52 @@ function* requestBookWorker({ book }) {
 
 function* requestChapterWorker({ book, chapter }) {
   try {
-    let endpoint = {};
-    endpoint = {
-      url: `/pfg/bookid/${book}/${chapter}`,
-      method: 'GET'
-    };
-    const bible = yield call(request.execute, { endpoint });
+    let cache = yield select(getChapterCache);
+    if(!cache[book]){
+      cache[book] = [];
+    }
+    if(!cache[book][chapter]){
+      let endpoint = {};
 
-    if (bible.success) {
-      const {
-        response: { data }
-      } = bible;
-
-      const response = {
-        cache: data,
-        request: data
+      if(isNaN(book)){
+        endpoint = {
+          url: `/pfg/book/${book}/${chapter}`,
+          method: 'GET'
+        };
+      } else {
+        endpoint = {
+          url: `/pfg/bookid/${book}/${chapter}`,
+          method: 'GET'
+        };
       }
-      yield put(actions.requestChapterSuccess(response));
-    } else if (bible.error) {
-      throw bible.error;
+      const bible = yield call(request.execute, { endpoint });
+
+      if (bible.success) {
+        const {
+          response: { data }
+        } = bible;
+        if(!cache[book]){
+          cache[book] = [];
+        }
+        cache[book][chapter] = data;
+        const response = {
+          cache,
+          request: data
+        }
+
+        yield put(actions.requestChapterSuccess(response));
+      } else if (bible.error) {
+        throw bible.error;
+      } else {
+        throw new Error('Failed to fetch Bible Chapter!');
+      }
     } else {
-      throw new Error('Failed to fetch Bible Chapter!');
+      const response = {
+        cache,
+        request: cache[book][chapter]
+      };
+
+      yield put(actions.requestChapterSuccess(response));
     }
   } catch (error) {
     yield put(actions.requestChapterFailure(error));

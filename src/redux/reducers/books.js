@@ -28,7 +28,6 @@ export const actions = {
 };
 
 export const initialState = {
-  cache: [],
   collection: []
 };
 

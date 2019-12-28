@@ -14,10 +14,10 @@ export const getBookChapter = createSelector(
 
 export const getBookCache = createSelector(
   getKJVBook,
-  book => book.cache
+  book => book.bookCache
 );
 
-export const getFormatting = createSelector(
+export const getChapterCache = createSelector(
   getKJVBook,
-  book => book.formatting
+  book => book.chapterCache
 );

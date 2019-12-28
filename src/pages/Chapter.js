@@ -5,14 +5,14 @@ import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Container } from 'react-bootstrap';
 import { actions as bookActions } from '../redux/reducers/book';
-import { getBook, getBookChapter, getFormatting } from '../redux/selectors/book';
+import { getBook, getChapterCache, getBookChapter } from '../redux/selectors/book';
 
 export class Chapter extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     book: PropTypes.object,
+    cache: PropTypes.array,
     collection: PropTypes.array,
-    formatting: PropTypes.array,
     match: PropTypes.object
   };
   componentDidMount() {
@@ -21,7 +21,13 @@ export class Chapter extends Component {
     const { book, chapter } = params;
 
     actions.requestBook(book);
-    actions.requestChapter({ book: Book.bid, chapter });
+    // Page access directly (book data isn't populated)
+    if(!Book.bid){
+      actions.requestChapter({ book, chapter });
+    // Page accessed by navigation (book data is populated)
+    } else {
+      actions.requestChapter({ book: Book.bid, chapter });
+    }
   }
   render() {
     const { book, collection, match: { params } } = this.props;
@@ -57,8 +63,8 @@ export class Chapter extends Component {
 
 const mapStateToProps = state => ({
   book: getBook(state),
-  collection: getBookChapter(state),
-  formatting: getFormatting(state)
+  cache: getChapterCache(state),
+  collection: getBookChapter(state)
 });
 
 const mapDispatchToProps = dispatch => ({
