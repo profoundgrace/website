@@ -55,7 +55,8 @@ export const initialState = {
   collection: {
     book: {},
     chapter: []
-  }
+  },
+  chapter: 1
 };
 
 export const reducer = (state = initialState, action = {}) => {
@@ -82,7 +83,8 @@ export const reducer = (state = initialState, action = {}) => {
         collection: {
           ...state.collection,
           chapter: action.chapter.request
-        }
+        },
+        chapter: Number(action.chapter.chapter)
       };
     case types.REQUEST_BOOK_FAILURE:
       return {

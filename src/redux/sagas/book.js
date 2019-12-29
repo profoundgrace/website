@@ -39,7 +39,8 @@ function* requestBookWorker({ book }) {
         request: cache[book]
       }
       // Populate Navigation
-      yield put(navActions.requestBookNavigator({book:book.bid}));
+      yield put(navActions.requestBookNavigator({book:cache[book].bid}));
+      // Return Cached Book Data
       yield put(actions.requestBookSuccess(response));
     }
   } catch (error) {
@@ -79,7 +80,8 @@ function* requestChapterWorker({ book, chapter }) {
         cache[book][chapter] = data;
         const response = {
           cache,
-          request: data
+          request: data,
+          chapter
         }
         // Populate Navigation
         if(isNaN(book)){
@@ -96,10 +98,12 @@ function* requestChapterWorker({ book, chapter }) {
     } else {
       const response = {
         cache,
-        request: cache[book][chapter]
+        request: cache[book][chapter],
+        chapter
       };
       // Populate Navigation
-      yield put(navActions.requestChapterNavigator({book:cache[book][chapter], chapter}));
+      yield put(navActions.requestChapterNavigator({book:cache[book][chapter][0].bid, chapter}));
+      // Return Cached Chapter Text Data
       yield put(actions.requestChapterSuccess(response));
     }
   } catch (error) {
