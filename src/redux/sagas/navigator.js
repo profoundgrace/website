@@ -1,39 +1,24 @@
-import { all, call, put, select, takeLatest } from 'redux-saga/effects';
-import request from '../../utils/request';
+import { all, put, select, take, takeLatest } from 'redux-saga/effects';
 import { actions, types } from '../reducers/navigator';
-import { actions as booksActions} from '../reducers/books';
+import { actions as booksActions, types as booksTypes} from '../reducers/books';
 import { getBooks } from '../selectors/books';
 
 function* requestBookNavigatorWorker({book}) {
-  console.log("running book navigator");
   try {
     let books = yield select(getBooks);
 
     if(books.length === 0){
-      let endpoint = {};
-      endpoint = {
-        url: '/pfg/books',
-        method: 'GET'
-      };
-      const bible = yield call(request.execute, { endpoint });
-
-      if (bible.success) {
-        const {
-          response: { books }
-        } = bible;
-        // Save this books data
-        yield put(booksActions.requestBooksSuccess(books));
-
-      } else if (bible.error) {
-        throw bible.error;
-      } else {
-        throw new Error('Failed to fetch books for navigation!');
-      }
+        yield put(booksActions.requestBooks());
+        yield take([
+          booksTypes.REQUEST_BOOKS_SUCCESS,
+          booksTypes.REQUEST_BOOKS_FAILURE
+        ]);
+        books = yield select(getBooks);
     }
     book = books[book-1];
 
-    let nextBook = null;
-    let prevBook = null;
+    let nextBook = false;
+    let prevBook = false;
     
     if(book.bid < 66){
       nextBook = books[book.bid];
@@ -56,38 +41,24 @@ function* requestBookNavigatorWorker({book}) {
 }
 
 function* requestChapterNavigatorWorker({book, chapter}) {
-  console.log("running chapter navigator");
   try {
     let books = yield select(getBooks);
 
     if(books.length === 0){
-      let endpoint = {};
-      endpoint = {
-        url: '/pfg/books',
-        method: 'GET'
-      };
-      const bible = yield call(request.execute, { endpoint });
-
-      if (bible.success) {
-        const {
-          response: { books }
-        } = bible;
-        // Save this books data
-        yield put(booksActions.requestBooksSuccess(books));
-
-      } else if (bible.error) {
-        throw bible.error;
-      } else {
-        throw new Error('Failed to fetch books for navigation!');
-      }
+      yield put(booksActions.requestBooks());
+      yield take([
+        booksTypes.REQUEST_BOOKS_SUCCESS,
+        booksTypes.REQUEST_BOOKS_FAILURE
+      ]);
+      books = yield select(getBooks);
     }
-    book = books[book-1];
+    book = books[Number(book)-1];
 
-    let nextBook = null;
-    let nextChapter = null;
-    let prevBook = null;
-    let prevChapter = null;
-    
+    let nextBook = false;
+    let nextChapter = false;
+    let prevBook = false;
+    let prevChapter = false;
+
     if(book.bid < 66){
       nextBook = books[book.bid];
     }
