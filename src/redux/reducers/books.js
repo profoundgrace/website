@@ -6,9 +6,8 @@ export const types = buildActions('books', [
   'REQUEST_BOOKS_FAILURE'
 ]);
 
-const requestBooks = books => ({
-  type: types.REQUEST_BOOKS,
-  books
+const requestBooks = () => ({
+  type: types.REQUEST_BOOKS
 });
 
 const requestBooksSuccess = books => ({
