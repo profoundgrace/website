@@ -11,6 +11,7 @@ import rootReducer from './redux/reducers';
 
 import './icons';
 import './index.scss';
+import "bootstrap/dist/css/bootstrap.css";
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
