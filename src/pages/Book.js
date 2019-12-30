@@ -5,6 +5,7 @@ import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
+import { Breadcrumbs } from '../components/Breadcrumbs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { actions as bookActions } from '../redux/reducers/book';
 import { getBook } from '../redux/selectors/book';
@@ -42,12 +43,15 @@ export class Book extends Component {
     return (
       <Fragment>
         <Container>
-          <Helmet title="Bible" />
-
+          <Helmet title={`${collection.name} | Holy Bible`} />
           <h1>Bible</h1>
+          <Breadcrumbs
+            base={(collection.bid < 40) ? "ot" : "nt"}
+            active={collection.name}
+          />
           <h2>{collection.name}</h2>
           {navigation.previous && navigation.previous.book !== null &&
-          <Button variant="light" size="lg" onClick={(e) => this.updateBook(navigation.previous.book.slug)} as={Link} to={'/bible/'+navigation.previous.book.slug} className="mr-2 mt-2">     
+          <Button variant="primary" size="sm" onClick={(e) => this.updateBook(navigation.previous.book.slug)} as={Link} to={'/bible/'+navigation.previous.book.slug} className="mr-2 mt-2">     
             <FontAwesomeIcon icon="chevron-left" /> {navigation.previous.book.name}
           </Button>
           }
@@ -57,7 +61,7 @@ export class Book extends Component {
             )
           })}
           {navigation.next && navigation.next.book !== null &&
-          <Button variant="light" size="lg" onClick={(e) => this.updateBook(navigation.next.book.slug)} as={Link} to={'/bible/'+navigation.next.book.slug} className="mr-2 mt-2">     
+          <Button variant="primary" size="sm" onClick={(e) => this.updateBook(navigation.next.book.slug)} as={Link} to={'/bible/'+navigation.next.book.slug} className="mr-2 mt-2">     
             {navigation.next.book.name} <FontAwesomeIcon icon="chevron-right" />
           </Button>
           }
