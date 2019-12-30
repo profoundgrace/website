@@ -2,19 +2,27 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 
 import {
   faBook,
+  faChevronCircleLeft,
   faChevronLeft,
-  faChevronRight
+  faChevronCircleRight,
+  faChevronRight,
+  faChevronUp,
+  faHeart
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
-  faHeart
+  faHeart as farHeart
 } from '@fortawesome/free-regular-svg-icons';
 
 library.add(
   faBook,
+  faChevronCircleLeft,
   faChevronLeft,
+  faChevronCircleRight,
   faChevronRight,
-  faHeart
+  faChevronUp,
+  faHeart,
+  farHeart
 );
 
 export default library;
