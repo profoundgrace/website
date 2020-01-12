@@ -65,7 +65,7 @@ export class Breadcrumbs extends Component {
           {this.basePath(base)}
           {links && links.map((item, index) => {
             return(
-              <li className="breadcrumb-item">
+              <li key={index} className="breadcrumb-item">
                 <Link to={item.url}>{item.name}</Link>
               </li>
             )
