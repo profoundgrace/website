@@ -50,7 +50,7 @@ export class Book extends Component {
             active={collection.name}
           />
           <h2>{collection.name}</h2>
-          {navigation.previous && navigation.previous.book !== null &&
+          {navigation.previous && navigation.previous.book !== false &&
           <Button variant="primary" size="sm" onClick={(e) => this.updateBook(navigation.previous.book.slug)} as={Link} to={'/bible/'+navigation.previous.book.slug} className="mr-2 mt-2">     
             <FontAwesomeIcon icon="chevron-left" /> {navigation.previous.book.name}
           </Button>
@@ -60,7 +60,7 @@ export class Book extends Component {
               <Button variant="light" size="lg" as={Link} to={'/bible/'+collection.slug+'/'+chapter} className="mr-2 mt-2" key={`chapter_${chapter}`}>{chapter}</Button>
             )
           })}
-          {navigation.next && navigation.next.book !== null &&
+          {navigation.next && navigation.next.book !== false &&
           <Button variant="primary" size="sm" onClick={(e) => this.updateBook(navigation.next.book.slug)} as={Link} to={'/bible/'+navigation.next.book.slug} className="mr-2 mt-2">     
             {navigation.next.book.name} <FontAwesomeIcon icon="chevron-right" />
           </Button>
