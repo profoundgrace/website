@@ -40,7 +40,7 @@ export class Bible extends Component {
               <Card.Body>
                 {collection.map((book, index) => {
                   return (
-                    <span><Button variant="light" as={Link} key={`book${index}`} to={'/bible/'+book.slug}>{book.name}</Button>{' '}</span>
+                    <Button className="mb-2 mr-2" variant="light" as={Link} key={`book${index}`} to={'/bible/'+book.slug}>{book.name}</Button>
                   );
                 })}
               </Card.Body>
@@ -50,8 +50,8 @@ export class Bible extends Component {
                 {collection.map((book, index) => {
                   return (
                     book.bid < 40 ?
-                    <span><Button variant="light" as={Link} key={`book${index}`} to={'/bible/'+book.slug}>{book.name}</Button>{' '}</span>
-                    : ''
+                    <Button className="mb-2 mr-2" variant="light" as={Link} key={`book${index}`} to={'/bible/'+book.slug}>{book.name}</Button>
+                    : null
                   );
                 })}
               </Card.Body>
@@ -61,8 +61,8 @@ export class Bible extends Component {
                 {collection.map((book, index) => {
                   return (
                     book.bid > 39 ?
-                    <span><Button variant="light" as={Link} key={`book${index}`} to={'/bible/'+book.slug}>{book.name}</Button>{' '}</span>
-                    : ''
+                    <Button className="mb-2 mr-2" variant="light" as={Link} key={`book${index}`} to={'/bible/'+book.slug}>{book.name}</Button>
+                    : null
                   );
                 })}
               </Card.Body>
