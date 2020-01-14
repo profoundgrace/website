@@ -64,7 +64,7 @@ export class Chapter extends Component {
           <Helmet title={`${book.name} ${chapter} | Bible`} />
           <h1>Bible</h1>
           <Breadcrumbs
-            base={(collection.bid < 40) ? "ot" : "nt"}
+            base={(book.bid < 40) ? "ot" : "nt"}
             links={[{name : book.name, url : `/bible/${book.slug}`}]}
             active={`Chapter ${chapter}`}
           />
