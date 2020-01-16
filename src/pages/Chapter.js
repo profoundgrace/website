@@ -117,7 +117,7 @@ export class Chapter extends Component {
           <Container className="text-center">
             {navigation.previous && navigation.previous.book &&
             <Button 
-              variant="primary"
+              variant="success"
               size="sm"
               as={Link}
               to={'/bible/'+navigation.previous.book.slug}
@@ -128,7 +128,7 @@ export class Chapter extends Component {
             }
             {navigation.previous && navigation.previous.chapter &&
             <Button
-              variant="warning"
+              variant="primary"
               onClick={(e) => this.updateChapter(navigation.previous.chapter)}
               as={Link}
               to={'/bible/'+book.slug+'/'+navigation.previous.chapter}
@@ -149,7 +149,7 @@ export class Chapter extends Component {
             </Button>
             {navigation.next && navigation.next.chapter &&
             <Button
-              variant="success"
+              variant="primary"
               onClick={(e) => this.updateChapter(navigation.next.chapter)}
               as={Link}
               to={'/bible/'+book.slug+'/'+navigation.next.chapter}
@@ -160,7 +160,7 @@ export class Chapter extends Component {
             }
             {navigation.next && navigation.next.book &&
             <Button
-              variant="primary"
+              variant="success"
               size="sm"
               as={Link}
               to={'/bible/'+navigation.next.book.slug}
