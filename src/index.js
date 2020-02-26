@@ -13,6 +13,7 @@ import './icons';
 import './index.scss';
 import "bootstrap/dist/css/bootstrap.css";
 import App from './components/App';
+import { getInitialState } from './utils';
 import * as serviceWorker from './serviceWorker';
 
 /* eslint-disable no-underscore-dangle */
@@ -22,7 +23,7 @@ const composer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const sagaMiddleware = createSagaMiddleware();
 const enhancers = composer(applyMiddleware(sagaMiddleware));
 
-export const store = createStore(rootReducer, enhancers);
+export const store = createStore(rootReducer, getInitialState(), enhancers);
 
 if (module.hot) {
   module.hot.accept('./redux/reducers', () => {

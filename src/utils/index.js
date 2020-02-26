@@ -1,3 +1,7 @@
+import dayjs from 'dayjs';
+
+import { getAuth, getAuthorization } from '../redux/selectors/auth';
+
 /**
  * Creates an object containing action constants namespaced under the specified reducer.
  *
@@ -36,4 +40,44 @@ export const buildUrl = endpoint => {
 
     return resultUrl.replace(`{${key}}`, value);
   }, `${baseUrl}${url}`);
+};
+
+export const getInitialState = () => {
+  // this needs to be require()d because an import results in a
+  // circular dependency
+  const { initialState } = require('../redux/reducers');
+
+  try {
+    const [accessToken, expiration] = [
+      localStorage.getItem('accessToken'),
+      localStorage.getItem('expiration')
+    ];
+
+    if (!accessToken) {
+      return initialState;
+    }
+
+
+    const expirationDate = dayjs(JSON.parse(expiration));
+
+    if (!expirationDate.isValid() || expirationDate.isBefore(dayjs())) {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('expiration');
+      return initialState;
+    }
+
+    return {
+      ...initialState,
+      auth: {
+        ...getAuth(initialState),
+        authorization: {
+          ...getAuthorization(initialState),
+          accessToken: JSON.parse(accessToken),
+          expiration: expirationDate
+        }
+      }
+    };
+  } catch {
+    return initialState;
+  }
 };

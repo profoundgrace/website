@@ -1,11 +1,15 @@
 import axios from 'axios';
+import dayjs from 'dayjs';
 import { buildUrl } from '../utils';
-import { call, race, delay } from 'redux-saga/effects';
+import { call, race, delay, select, take } from 'redux-saga/effects';
+
+import { types } from '../redux/reducers/auth';
+import { getAuthorization } from '..//redux/selectors/auth';
 
 /**
  * Based on code by:
  * @author ayan4m1 <https://github.com/ayan4m1>
- * As of 20191117
+ * As of 20200225
  * Modified by:
  * @author daviddyess <https://github.com/daviddyess>
  */
@@ -54,7 +58,7 @@ class Request {
   }
 
   isUrlProtected(url) {
-    const unprotectedResources = ['oauth', 'register'];
+    const unprotectedResources = ['auth/login', 'pfg/book', 'pfg/bookid', 'pfg/books'];
 
     for (const resource of unprotectedResources) {
       if (url.startsWith(`/${resource}`)) {
@@ -63,6 +67,35 @@ class Request {
     }
 
     return true;
+  }
+
+  /**
+   * Fetches an access token or returns from the store if present
+   *
+   * @param {Number} timeout
+   */
+  *getAccessToken(timeout) {
+    const { accessToken, expiration } = yield select(getAuthorization);
+
+    // sanity check authorization information
+    if (accessToken && dayjs().isBefore(expiration)) {
+      return accessToken;
+    }
+
+    try {
+      const { authorization } = yield race({
+        authorization: take(types.REQUEST_TOKEN_SUCCESS),
+        timeout: delay(timeout)
+      });
+
+      if (authorization) {
+        return authorization.accessToken;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
   }
 
   *execute({ endpoint, data, headers, options = {} }) {
@@ -83,9 +116,25 @@ class Request {
         return failureMessage('Endpoint is missing method!');
       }
 
+      // destructured parameters are declared as var
+      if (!headers) {
+        headers = {};
+      }
       // default timeout of 10 seconds
       const { timeout = 10000 } = options;
 
+      // skip access token verification if logging in
+      if(url !== '/auth/login'){
+        const accessToken = yield* this.getAccessToken(timeout);
+
+        if (this.isUrlProtected(url) && !accessToken) {
+          return failureMessage('Missing authorization information!');
+        }
+        if (accessToken){
+          headers.Authorization = `Bearer ${accessToken}`;
+        }
+      }
+      
       const requestUrl = yield call(buildUrl, endpoint);
 
       // start a race between the request and a timer, cancel the loser

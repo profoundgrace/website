@@ -28,6 +28,7 @@ export class Header extends Component {
               <Nav.Link as={NavLink} to="/">Home</Nav.Link>
               <Nav.Link as={NavLink} to="/bible">Bible</Nav.Link>
               <Nav.Link as={NavLink} to="/search">Search</Nav.Link>
+              <Nav.Link as={NavLink} to="/login">Login</Nav.Link>
             </Nav>
             <Form inline>
               <Form.Control type="text" placeholder="Search" className="mr-sm-2" />

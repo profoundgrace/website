@@ -3,6 +3,7 @@ import request from '../../utils/request';
 import { actions, types } from '../reducers/book';
 import { actions as navActions } from '../reducers/navigator';
 import { getBookCache, getChapterCache } from '../selectors/book';
+//import { actions as toastActions } from '../reducers/toast';
 
 function* requestBookWorker({ book }) {
   try {

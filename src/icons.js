@@ -2,12 +2,14 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 
 import {
   faBook,
+  faCheck,
   faChevronCircleLeft,
   faChevronLeft,
   faChevronCircleRight,
   faChevronRight,
   faChevronUp,
-  faHeart
+  faHeart,
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -16,13 +18,15 @@ import {
 
 library.add(
   faBook,
+  faCheck,
   faChevronCircleLeft,
   faChevronLeft,
   faChevronCircleRight,
   faChevronRight,
   faChevronUp,
   faHeart,
-  farHeart
+  farHeart,
+  faTimesCircle
 );
 
 export default library;
