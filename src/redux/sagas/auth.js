@@ -76,8 +76,12 @@ function* requestCurrentUserWorker() {
       const {
         response: { data }
       } = result;
-
-      yield put(actions.requestCurrentUserSuccess(data));
+      const user = {
+        name: data.username,
+        id: data.userid,
+        data: data.data
+      }
+      yield put(actions.requestCurrentUserSuccess(user));
     } else if (result.error) {
       throw result.error;
     } else {
@@ -128,7 +132,7 @@ function* loginUserWorker({ username, password }) {
         toastActions.popToast({
           title: 'Logged in',
           icon: 'check',
-          message: `${user.name}, have been authenticated.`
+          message: `${user.name}, has been authenticated.`
         })
       );
     }
@@ -203,16 +207,17 @@ function* logoutUserWorker() {
 }
 
 function* registerUserWorker({
-  details: { username, password }
+  details: { username, email, password }
 }) {
   try {
     const endpoint = {
-      url: '/register',
+      url: '/auth/register',
       method: 'POST'
     };
     const data = {
       username,
-      password
+      password,
+      email
     };
     const result = yield call(request.execute, { endpoint, data });
 

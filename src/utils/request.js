@@ -58,7 +58,7 @@ class Request {
   }
 
   isUrlProtected(url) {
-    const unprotectedResources = ['auth/login', 'pfg/book', 'pfg/bookid', 'pfg/books'];
+    const unprotectedResources = ['auth/login', 'auth/register', 'pfg/book', 'pfg/bookid', 'pfg/books'];
 
     for (const resource of unprotectedResources) {
       if (url.startsWith(`/${resource}`)) {
@@ -123,16 +123,19 @@ class Request {
       // default timeout of 10 seconds
       const { timeout = 10000 } = options;
 
-      // skip access token verification if logging in
-      if(url !== '/auth/login'){
+      if (this.isUrlProtected(url)) {
         const accessToken = yield* this.getAccessToken(timeout);
 
-        if (this.isUrlProtected(url) && !accessToken) {
+        if (!accessToken) {
           return failureMessage('Missing authorization information!');
         }
-        if (accessToken){
-          headers.Authorization = `Bearer ${accessToken}`;
+
+        // destructured parameters are declared as var
+        if (!headers) {
+          headers = {};
         }
+
+        headers.Bearer = `${accessToken}`;
       }
       
       const requestUrl = yield call(buildUrl, endpoint);

@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-//import { Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { Button, Container, Form } from 'react-bootstrap';
 import { Form as FinalForm, Field } from 'react-final-form';
 import { withLastLocation } from 'react-router-last-location';
@@ -37,10 +37,13 @@ export class Login extends Component {
   }
 
   render() {
-    const { loggingIn, loggedIn } = this.props;
+    const { loggingIn, loggedIn, lastLocation } = this.props;
 
     if (loggedIn) {
-      return <div>You are logged in!</div>;
+      if(lastLocation){
+        return <Redirect to={lastLocation.pathname} />
+      }
+      return <Redirect to='/' />
     }
 
     return (

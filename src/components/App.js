@@ -12,6 +12,7 @@ import Bible from "../pages/Bible";
 import Book from "../pages/Book";
 import Chapter from "../pages/Chapter";
 import Login from "../pages/Login";
+import Register from "../pages/Register";
 import Search from "../pages/Search";
 import NotFound from "../pages/NotFound";
 import ToastDrawer from './ToastDrawer/ToastDrawer';
@@ -45,6 +46,7 @@ export class App extends Component {
           <Route exact path="/bible/:book" component={Book} />
           <Route exact path="/bible/:book/:chapter" component={Chapter} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
           <Route exact path="/search" component={Search} />
           <Route component={NotFound} />
         </Switch>

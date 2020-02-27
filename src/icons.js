@@ -9,7 +9,8 @@ import {
   faChevronRight,
   faChevronUp,
   faHeart,
-  faTimesCircle
+  faTimesCircle,
+  faUserCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -26,7 +27,8 @@ library.add(
   faChevronUp,
   faHeart,
   farHeart,
-  faTimesCircle
+  faTimesCircle,
+  faUserCircle
 );
 
 export default library;
