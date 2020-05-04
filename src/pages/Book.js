@@ -5,11 +5,11 @@ import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
-import { Breadcrumbs } from '../components/Breadcrumbs';
+import { Breadcrumbs } from 'components/Breadcrumbs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { actions as bookActions } from '../redux/reducers/book';
-import { getBook } from '../redux/selectors/book';
-import { getNavigation } from '../redux/selectors/navigator';
+import { actions as bookActions } from 'redux/reducers/book';
+import { getBook } from 'redux/selectors/book';
+import { getNavigation } from 'redux/selectors/navigator';
 
 export class Book extends Component {
   static propTypes = {
@@ -18,24 +18,29 @@ export class Book extends Component {
     match: PropTypes.object,
     navigation: PropTypes.object
   };
+
   constructor(props){
     super(props);
 
     this.updateBook = this.updateBook.bind(this);
   }
+
   componentDidMount() {
     const { actions, match: { params } } = this.props;
     
     actions.requestBook(params.book);
   }
+
   updateBook(book){
     const { actions } = this.props;
 
     actions.requestBook(book);
   }
+
   render() {
     const { collection, navigation } = this.props;
     let chapters = [];
+    
     for (var i = 1; i <= collection.chapters; i++) {
       chapters[i] = i;
     }

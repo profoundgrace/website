@@ -8,6 +8,7 @@ export class Breadcrumbs extends Component {
     links: PropTypes.array,
     active: PropTypes.string
   };
+
   basePath(base){
     switch(base){
       case 'bible':
@@ -57,6 +58,7 @@ export class Breadcrumbs extends Component {
         )
     }
   }
+
   render() {
     const { active, base, links } = this.props;
     return (
@@ -77,10 +79,10 @@ export class Breadcrumbs extends Component {
       </nav>
     )
   }
+
   Item(){
     return 'yes';
   }
-
 }
 
 export default Breadcrumbs;

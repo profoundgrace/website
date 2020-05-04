@@ -6,8 +6,8 @@ import { Link, NavLink } from 'react-router-dom';
 import { Button, Container, Form, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { actions as authActions } from '../redux/reducers/auth';
-import { getUser, isLoggedIn } from '../redux/selectors/auth';
+import { actions as authActions } from 'redux/reducers/auth';
+import { getUser, isLoggedIn } from 'redux/selectors/auth';
 
 export class Header extends Component {
   static propTypes = {

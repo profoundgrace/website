@@ -4,19 +4,23 @@ import { bindActionCreators } from 'redux';
 import React, { Component, Suspense } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { actions as authActions } from '../redux/reducers/auth';
-import Header from "./Header";
-import Footer from "./Footer";
-import Home from "../pages/Home";
-import Bible from "../pages/Bible";
-import Book from "../pages/Book";
-import Chapter from "../pages/Chapter";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import Search from "../pages/Search";
-import NotFound from "../pages/NotFound";
-import ToastDrawer from './ToastDrawer/ToastDrawer';
-import SuspenseFallback from './SuspenseFallback/SuspenseFallback';
+import { actions as authActions } from 'redux/reducers/auth';
+
+import Header from "components/Header";
+import Footer from "components/Footer";
+import ToastDrawer from 'components/ToastDrawer/ToastDrawer';
+import SuspenseFallback from 'components/SuspenseFallback/SuspenseFallback';
+
+import {
+  Bible,
+  Book,
+  Chapter,
+  Home,
+  Login,
+  NotFound,
+  Register,
+  Search
+} from 'pages';
 
 export class App extends Component {
   static propTypes = {

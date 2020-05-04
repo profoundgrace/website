@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 import { all, call, put, takeLatest, take, select } from 'redux-saga/effects';
 
-import request from '../../utils/request';
-import { actions, types } from '../reducers/auth';
-import { actions as toastActions } from '../reducers/toast';
-import { isLoggedIn/*, getUser*/ } from '../selectors/auth';
+import request from 'utils/request';
+import { actions, types } from 'redux/reducers/auth';
+import { actions as toastActions } from 'redux/reducers/toast';
+import { isLoggedIn/*, getUser*/ } from 'redux/selectors/auth';
 /**
  * Based on code by:
  * @author ayan4m1 <https://github.com/ayan4m1>

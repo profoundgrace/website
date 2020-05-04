@@ -4,7 +4,7 @@ import { Toast } from 'react-bootstrap';
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { getQueue } from '../../redux/selectors/toast';
+import { getQueue } from 'redux/selectors/toast';
 
 export class ToastDrawer extends Component {
   static propTypes = {

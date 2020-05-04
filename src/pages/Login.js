@@ -8,9 +8,9 @@ import { Button, Container, Form } from 'react-bootstrap';
 import { Form as FinalForm, Field } from 'react-final-form';
 import { withLastLocation } from 'react-router-last-location';
 
-import { actions as authActions } from '../redux/reducers/auth';
-import { required, length, composeValidators } from '../utils/validation';
-import { isLoggingIn, isLoggedIn } from '../redux/selectors/auth';
+import { actions as authActions } from 'redux/reducers/auth';
+import { required, length, composeValidators } from 'utils/validation';
+import { isLoggingIn, isLoggedIn } from 'redux/selectors/auth';
 
 export class Login extends Component {
   static propTypes = {

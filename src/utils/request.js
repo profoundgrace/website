@@ -1,10 +1,10 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { buildUrl } from '../utils';
+import { buildUrl } from 'utils';
 import { call, race, delay, select, take } from 'redux-saga/effects';
 
-import { types } from '../redux/reducers/auth';
-import { getAuthorization } from '..//redux/selectors/auth';
+import { types } from 'redux/reducers/auth';
+import { getAuthorization } from 'redux/selectors/auth';
 
 /**
  * Based on code by:
@@ -58,7 +58,7 @@ class Request {
   }
 
   isUrlProtected(url) {
-    const unprotectedResources = ['auth/login', 'auth/register', 'pfg/book', 'pfg/bookid', 'pfg/books'];
+    const unprotectedResources = ['auth/login', 'auth/register', 'bible/book', 'bible/bookid', 'bible/books'];
 
     for (const resource of unprotectedResources) {
       if (url.startsWith(`/${resource}`)) {

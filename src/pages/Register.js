@@ -6,15 +6,15 @@ import { bindActionCreators } from 'redux';
 import { Form as FinalForm, Field } from 'react-final-form';
 import { Button, Container, Form, InputGroup, Col } from 'react-bootstrap';
 
-import { actions as authActions } from '../redux/reducers/auth';
-import { isRegistering } from '../redux/selectors/auth';
+import { actions as authActions } from 'redux/reducers/auth';
+import { isRegistering } from 'redux/selectors/auth';
 import {
   composeValidators,
   required,
   matches,
   email,
   length
-} from '../utils/validation';
+} from 'utils/validation';
 
 export class Register extends Component {
   static propTypes = {

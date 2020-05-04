@@ -1,9 +1,8 @@
 import { all, call, put, takeLatest, select } from 'redux-saga/effects';
-import request from '../../utils/request';
-import { actions, types } from '../reducers/book';
-import { actions as navActions } from '../reducers/navigator';
-import { getBookCache, getChapterCache } from '../selectors/book';
-//import { actions as toastActions } from '../reducers/toast';
+import request from 'utils/request';
+import { actions, types } from 'redux/reducers/book';
+import { actions as navActions } from 'redux/reducers/navigator';
+import { getBookCache, getChapterCache } from 'redux/selectors/book';
 
 function* requestBookWorker({ book }) {
   try {
@@ -12,7 +11,7 @@ function* requestBookWorker({ book }) {
     if(!cache[book]){
       let endpoint = {};
       endpoint = {
-        url: `/pfg/book/${book}`,
+        url: `/bible/book/${book}`,
         method: 'GET'
       };
       const bible = yield call(request.execute, { endpoint });
@@ -60,12 +59,12 @@ function* requestChapterWorker({ book, chapter }) {
 
       if(isNaN(book)){
         endpoint = {
-          url: `/pfg/book/${book}/${chapter}`,
+          url: `/bible/book/${book}/${chapter}`,
           method: 'GET'
         };
       } else {
         endpoint = {
-          url: `/pfg/bookid/${book}/${chapter}`,
+          url: `/bible/bookid/${book}/${chapter}`,
           method: 'GET'
         };
       }

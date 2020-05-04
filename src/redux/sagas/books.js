@@ -1,7 +1,7 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
-import request from '../../utils/request';
-import { actions, types } from '../reducers/books';
-import { getBooks } from '../selectors/books';
+import request from 'utils/request';
+import { actions, types } from 'redux/reducers/books';
+import { getBooks } from 'redux/selectors/books';
 
 function* requestBooksWorker() {
   try {
@@ -10,7 +10,7 @@ function* requestBooksWorker() {
     if(books.length === 0){
       let endpoint = {};
       endpoint = {
-        url: '/pfg/books',
+        url: '/bible/books',
         method: 'GET'
       };
       const bible = yield call(request.execute, { endpoint });

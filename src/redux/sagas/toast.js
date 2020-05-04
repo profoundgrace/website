@@ -1,7 +1,7 @@
 import nanoid from 'nanoid';
 import { put, delay, takeEvery, all } from 'redux-saga/effects';
 
-import { actions, types } from '../reducers/toast';
+import { actions, types } from 'redux/reducers/toast';
 /**
  * Based on code by:
  * @author ayan4m1 <https://github.com/ayan4m1>

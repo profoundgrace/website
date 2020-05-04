@@ -1,7 +1,7 @@
 import { all, put, select, take, takeLatest } from 'redux-saga/effects';
-import { actions, types } from '../reducers/navigator';
-import { actions as booksActions, types as booksTypes} from '../reducers/books';
-import { getBooks } from '../selectors/books';
+import { actions, types } from 'redux/reducers/navigator';
+import { actions as booksActions, types as booksTypes} from 'redux/reducers/books';
+import { getBooks } from 'redux/selectors/books';
 
 function* requestBookNavigatorWorker({book}) {
   try {

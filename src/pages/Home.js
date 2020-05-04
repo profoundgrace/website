@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
-import logo from "../static/logo.svg";
+import logo from "static/logo.svg";
 
 class Home extends Component {
   render() {
+    
     return (
       <Fragment>
         <div className="App">

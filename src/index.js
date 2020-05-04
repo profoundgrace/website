@@ -6,15 +6,16 @@ import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { LastLocationProvider } from 'react-router-last-location';
-import rootSaga from './redux/sagas';
-import rootReducer from './redux/reducers';
+import rootSaga from 'redux/sagas';
+import rootReducer from 'redux/reducers';
 
-import './icons';
-import './index.scss';
-import "bootstrap/dist/css/bootstrap.css";
-import App from './components/App';
-import { getInitialState } from './utils';
-import * as serviceWorker from './serviceWorker';
+import 'icons';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'index.scss';
+
+import App from 'components/App';
+import { getInitialState } from 'utils';
+import * as serviceWorker from 'serviceWorker';
 
 /* eslint-disable no-underscore-dangle */
 const composer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -34,7 +35,7 @@ if (module.hot) {
 sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
-  <Router>
+  <Router basename="/">
     <LastLocationProvider>
       <Provider store={store}>
         <App />

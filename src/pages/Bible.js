@@ -5,9 +5,9 @@ import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button, Card, Container, Tab, Tabs } from 'react-bootstrap';
-import { Breadcrumbs } from '../components/Breadcrumbs';
-import { actions as booksActions } from '../redux/reducers/books';
-import { getBooks } from '../redux/selectors/books';
+import { Breadcrumbs } from 'components/Breadcrumbs';
+import { actions as booksActions } from 'redux/reducers/books';
+import { getBooks } from 'redux/selectors/books';
 
 export class Bible extends Component {
   static propTypes = {
@@ -15,16 +15,13 @@ export class Bible extends Component {
     collection: PropTypes.array,
     match: PropTypes.object
   };
-/*
-  constructor(props){
-    super(props);
-  }
-*/
+
   componentDidMount() {
     const { actions } = this.props;
 
     actions.requestBooks();
   }
+  
   render() {
     const { collection, match: { path }} = this.props;
     return (

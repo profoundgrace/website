@@ -1,4 +1,4 @@
-import { buildActions } from '../../utils';
+import { buildActions } from 'utils';
 /**
  * Based on code by:
  * @author ayan4m1 <https://github.com/ayan4m1>

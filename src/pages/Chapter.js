@@ -5,11 +5,11 @@ import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
-import { Breadcrumbs } from '../components/Breadcrumbs';
+import { Breadcrumbs } from 'components/Breadcrumbs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { actions as bookActions } from '../redux/reducers/book';
-import { getBook, getChapter, getBookChapter } from '../redux/selectors/book';
-import { getNavigation } from '../redux/selectors/navigator';
+import { actions as bookActions } from 'redux/reducers/book';
+import { getBook, getChapter, getBookChapter } from 'redux/selectors/book';
+import { getNavigation } from 'redux/selectors/navigator';
 
 export class Chapter extends Component {
   static propTypes = {
@@ -20,11 +20,13 @@ export class Chapter extends Component {
     match: PropTypes.object,
     navigation: PropTypes.object
   };
+
   constructor(props){
     super(props);
 
     this.updateChapter = this.updateChapter.bind(this);
   }
+
   componentDidMount() {
     const { actions, match: { params } } = this.props;
     const Book = this.props.book;
@@ -39,15 +41,14 @@ export class Chapter extends Component {
       actions.requestChapter({ book: Book.bid, chapter });
     }
   }
-  componentDidUpdate(){
-    
-  }
+
   updateChapter(chapter){
     const { actions } = this.props;
     const Book = this.props.book;
     
     actions.requestChapter({ book: Book.bid, chapter });
   }
+
   render() {
     const { book, chapter, collection, navigation } = this.props;
     let formatting = [];
@@ -58,6 +59,7 @@ export class Chapter extends Component {
         formatting[index + 1] = true;
       }
     });
+    
     return (
       <Fragment>
         <Container>

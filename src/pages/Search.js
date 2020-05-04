@@ -5,9 +5,9 @@ import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 //import { Link } from 'react-router-dom';
 import { Button, Container, Form} from 'react-bootstrap';
-import { actions as booksActions } from '../redux/reducers/books';
-import { getBooks } from '../redux/selectors/books';
-import { Breadcrumbs } from '../components/Breadcrumbs';
+import { actions as booksActions } from 'redux/reducers/books';
+import { getBooks } from 'redux/selectors/books';
+import { Breadcrumbs } from 'components/Breadcrumbs';
 
 export class Search extends Component {
   static propTypes = {
@@ -15,6 +15,7 @@ export class Search extends Component {
     collection: PropTypes.array,
     match: PropTypes.object
   };
+
   constructor(props){
     super(props);
     this.state = {
@@ -24,11 +25,13 @@ export class Search extends Component {
     }
     this.handleInputChange = this.handleInputChange.bind(this);
   }
+
   componentDidMount() {
     const { actions } = this.props;
 
     actions.requestBooks();
   }
+
   handleInputChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -38,6 +41,7 @@ export class Search extends Component {
       [name]: value
     });
   }
+
   submitForm = (e) => {
     this.setState({ submitting: true });
     e.preventDefault();
@@ -55,6 +59,7 @@ export class Search extends Component {
       }
     })
   }
+
   render() {
     const { query } = this.state;
     const isSubmitting = this.state.submitting;
@@ -66,6 +71,7 @@ export class Search extends Component {
     } else {
       button = <Button type="submit">Search</Button>;
     }
+    
     return (
       <Fragment>
         <Container>

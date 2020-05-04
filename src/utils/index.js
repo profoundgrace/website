@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { getAuth, getAuthorization } from '../redux/selectors/auth';
+import { getAuth, getAuthorization } from 'redux/selectors/auth';
 
 /**
  * Creates an object containing action constants namespaced under the specified reducer.
@@ -45,7 +45,7 @@ export const buildUrl = endpoint => {
 export const getInitialState = () => {
   // this needs to be require()d because an import results in a
   // circular dependency
-  const { initialState } = require('../redux/reducers');
+  const { initialState } = require('redux/reducers');
 
   try {
     const [accessToken, expiration] = [
