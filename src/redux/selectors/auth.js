@@ -17,7 +17,7 @@ export const isLoggingOut = createSelector(getAuth, auth =>
   Boolean(auth.loggingOut)
 );
 
-export const getUser = createSelector(
+export const getCurrentUser = createSelector(
   getAuth,
   auth => auth.user
 );

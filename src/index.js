@@ -10,7 +10,8 @@ import rootSaga from 'redux/sagas';
 import rootReducer from 'redux/reducers';
 
 import 'icons';
-import 'bootstrap/dist/css/bootstrap.css';
+//import 'bootstrap/dist/css/bootstrap.css';
+import 'bootswatch/dist/litera/bootstrap.min.css';
 import 'index.scss';
 
 import App from 'components/App';

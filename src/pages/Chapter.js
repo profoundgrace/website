@@ -61,119 +61,117 @@ export class Chapter extends Component {
     });
     
     return (
-      <Fragment>
-        <Container>
-          <Helmet title={`${book.name} ${chapter} | Bible`} />
-          <h1>Bible</h1>
-          <Breadcrumbs
-            base={(book.bid < 40) ? "ot" : "nt"}
-            links={[{name : book.name, url : `/bible/${book.slug}`}]}
-            active={`Chapter ${chapter}`}
-          />
-          <Container fluid={true} className="text-center">
-            <Button 
-              variant="light"
-              size="sm"
-              as={Link}
-              to={'/bible/'+book.slug}
-            >
-              <FontAwesomeIcon icon="chevron-up" /><br />
-              Chapters
-            </Button>
-            <h2>
-              {navigation.previous && navigation.previous.chapter &&
-                <Button 
-                  variant="link" 
-                  size="sm" 
-                  onClick={(e) => this.updateChapter(navigation.previous.chapter)} 
-                  as={Link} 
-                  to={'/bible/'+book.slug+'/'+navigation.previous.chapter}
-                >
-                  <FontAwesomeIcon icon="chevron-circle-left" size="2x" />
-                </Button>
-              }
-              {' '}
-              {book.name} {chapter}
-              {' '}
-              {navigation.next && navigation.next.chapter &&
-              <Button
-                variant="link"
-                size="sm"
-                onClick={(e) => this.updateChapter(navigation.next.chapter)}
-                as={Link}
-                to={'/bible/'+book.slug+'/'+navigation.next.chapter}
-              >     
-                <FontAwesomeIcon icon="chevron-circle-right" size="2x" />
-              </Button>
-              }
-            </h2>            
-          </Container>
-          {collection.map((verse, index) => {
-            return(
-              <Fragment key={verse.verse}>
-                {formatting[verse.verse] ? <br className="mb-2" /> : ''}
-                <sup>&nbsp; {verse.verse}</sup> {verse.text}
-              </Fragment>
-            )
-          })}
-          <Container className="text-center">
-            {navigation.previous && navigation.previous.book &&
-            <Button 
-              variant="success"
-              size="sm"
-              as={Link}
-              to={'/bible/'+navigation.previous.book.slug}
-              className="mr-2 mt-2"
-            >     
-              <FontAwesomeIcon icon="chevron-left" /> {navigation.previous.book.name}
-            </Button>
-            }
+      <Container fluid>
+        <Helmet title={`${book.name} ${chapter} | Bible`} />
+        <h1>Bible</h1>
+        <Breadcrumbs
+          base={(book.bid < 40) ? "ot" : "nt"}
+          links={[{name : book.name, url : `/bible/${book.slug}`}]}
+          active={`Chapter ${chapter}`}
+        />
+        <Container fluid={true} className="text-center">
+          <Button 
+            variant="light"
+            size="sm"
+            as={Link}
+            to={'/bible/'+book.slug}
+          >
+            <FontAwesomeIcon icon="chevron-up" /><br />
+            Chapters
+          </Button>
+          <h2>
             {navigation.previous && navigation.previous.chapter &&
-            <Button
-              variant="primary"
-              onClick={(e) => this.updateChapter(navigation.previous.chapter)}
-              as={Link}
-              to={'/bible/'+book.slug+'/'+navigation.previous.chapter}
-              className="mr-2 mt-2"
-            >
-              <FontAwesomeIcon icon="chevron-circle-left" /> {book.name} {navigation.previous.chapter}
-            </Button>
+              <Button 
+                variant="link" 
+                size="sm" 
+                onClick={(e) => this.updateChapter(navigation.previous.chapter)} 
+                as={Link} 
+                to={'/bible/'+book.slug+'/'+navigation.previous.chapter}
+              >
+                <FontAwesomeIcon icon="chevron-circle-left" size="2x" />
+              </Button>
             }
-            <Button
-              variant="secondary"
-              size="sm"
-              as={Link}
-              to={'/bible/'+book.slug}
-              className="mr-2 mt-2"
-            >
-              <FontAwesomeIcon icon="chevron-up" /><br />
-              Chapters
-            </Button>
+            {' '}
+            {book.name} {chapter}
+            {' '}
             {navigation.next && navigation.next.chapter &&
             <Button
-              variant="primary"
+              variant="link"
+              size="sm"
               onClick={(e) => this.updateChapter(navigation.next.chapter)}
               as={Link}
               to={'/bible/'+book.slug+'/'+navigation.next.chapter}
-              className="mr-2 mt-2"
             >     
-              {book.name} {navigation.next.chapter} <FontAwesomeIcon icon="chevron-circle-right" />
+              <FontAwesomeIcon icon="chevron-circle-right" size="2x" />
             </Button>
             }
-            {navigation.next && navigation.next.book &&
-            <Button
-              variant="success"
-              size="sm"
-              as={Link}
-              to={'/bible/'+navigation.next.book.slug}
-              className="mr-2 mt-2"
-            >     
-              {navigation.next.book.name} <FontAwesomeIcon icon="chevron-right" />
-            </Button>
-            }
-          </Container>
+          </h2>            
         </Container>
-      </Fragment>
+        {collection.map((verse, index) => {
+          return(
+            <Fragment key={verse.verse}>
+              {formatting[verse.verse] ? <br className="mb-2" /> : ''}
+              <sup>&nbsp; {verse.verse}</sup> {verse.text}
+            </Fragment>
+          )
+        })}
+        <Container className="text-center">
+          {navigation.previous && navigation.previous.book &&
+          <Button 
+            variant="success"
+            size="sm"
+            as={Link}
+            to={'/bible/'+navigation.previous.book.slug}
+            className="mr-2 mt-2"
+          >     
+            <FontAwesomeIcon icon="chevron-left" /> {navigation.previous.book.name}
+          </Button>
+          }
+          {navigation.previous && navigation.previous.chapter &&
+          <Button
+            variant="primary"
+            onClick={(e) => this.updateChapter(navigation.previous.chapter)}
+            as={Link}
+            to={'/bible/'+book.slug+'/'+navigation.previous.chapter}
+            className="mr-2 mt-2"
+          >
+            <FontAwesomeIcon icon="chevron-circle-left" /> {book.name} {navigation.previous.chapter}
+          </Button>
+          }
+          <Button
+            variant="secondary"
+            size="sm"
+            as={Link}
+            to={'/bible/'+book.slug}
+            className="mr-2 mt-2"
+          >
+            <FontAwesomeIcon icon="chevron-up" /><br />
+            Chapters
+          </Button>
+          {navigation.next && navigation.next.chapter &&
+          <Button
+            variant="primary"
+            onClick={(e) => this.updateChapter(navigation.next.chapter)}
+            as={Link}
+            to={'/bible/'+book.slug+'/'+navigation.next.chapter}
+            className="mr-2 mt-2"
+          >     
+            {book.name} {navigation.next.chapter} <FontAwesomeIcon icon="chevron-circle-right" />
+          </Button>
+          }
+          {navigation.next && navigation.next.book &&
+          <Button
+            variant="success"
+            size="sm"
+            as={Link}
+            to={'/bible/'+navigation.next.book.slug}
+            className="mr-2 mt-2"
+          >     
+            {navigation.next.book.name} <FontAwesomeIcon icon="chevron-right" />
+          </Button>
+          }
+        </Container>
+      </Container>
     );
   }
 }

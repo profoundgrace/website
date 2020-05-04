@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 //import { Link } from 'react-router-dom';
 import { Button, Container, Form} from 'react-bootstrap';
@@ -73,8 +73,7 @@ export class Search extends Component {
     }
     
     return (
-      <Fragment>
-        <Container>
+        <Container fluid>
           <Helmet title="Bible Search" />
           <h1>Bible</h1>
           <Breadcrumbs 
@@ -94,7 +93,6 @@ export class Search extends Component {
             {button}
           </Form>
         </Container>
-      </Fragment>
     );
   }
 }

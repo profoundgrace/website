@@ -26,7 +26,7 @@ export class Bible extends Component {
     const { collection, match: { path }} = this.props;
     return (
       <Fragment>
-        <Container>
+        <Container fluid>
           <Helmet title="Bible" />
           <h1>Bible</h1>
           <Breadcrumbs 

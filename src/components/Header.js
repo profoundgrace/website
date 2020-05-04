@@ -7,7 +7,7 @@ import { Button, Container, Form, Navbar, Nav, NavDropdown } from 'react-bootstr
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { actions as authActions } from 'redux/reducers/auth';
-import { getUser, isLoggedIn } from 'redux/selectors/auth';
+import { getCurrentUser, isLoggedIn } from 'redux/selectors/auth';
 
 export class Header extends Component {
   static propTypes = {
@@ -39,8 +39,8 @@ export class Header extends Component {
     const { loggedIn, user } = this.props;
 
     return (
-      <Container>
-        <Navbar bg="light" expand="lg">
+      <Container fluid>
+        <Navbar bg="dark" variant="dark" expand="lg">
           <Navbar.Brand as={Link} to="/">Profound Grace</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -56,7 +56,8 @@ export class Header extends Component {
               <Form.Control type="text" placeholder="Search" className="mr-sm-2" />
               <Button variant="outline-success">Search</Button>
             </Form>
-            {loggedIn && user ?              
+            <Nav>
+            {loggedIn && user ?
               <NavDropdown title={user.name} id="user-nav-menu">
                 <NavDropdown.Item href="#action/3.3">Account</NavDropdown.Item>
                 <NavDropdown.Divider />
@@ -68,6 +69,7 @@ export class Header extends Component {
               <Nav.Link as={NavLink} to="/register">Register</Nav.Link>
               </Fragment>
             }
+            </Nav>
           </Navbar.Collapse>
         </Navbar>
       </Container>
@@ -78,7 +80,7 @@ export class Header extends Component {
 
 const mapStateToProps = state => ({
   loggedIn: isLoggedIn(state),
-  user: getUser(state)
+  user: getCurrentUser(state)
 });
 
 const mapDispatchToProps = dispatch => ({

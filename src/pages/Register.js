@@ -40,7 +40,7 @@ export class Register extends Component {
     const { registering } = this.props;
 
     return (
-      <Container>
+      <Container fluid>
         <Helmet title="Register" />
         <h1>User Registration</h1>
         <FinalForm

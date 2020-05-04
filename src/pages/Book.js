@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
@@ -46,32 +46,30 @@ export class Book extends Component {
     }
 
     return (
-      <Fragment>
-        <Container>
-          <Helmet title={`${collection.name} | Holy Bible`} />
-          <h1>Bible</h1>
-          <Breadcrumbs
-            base={(collection.bid < 40) ? "ot" : "nt"}
-            active={collection.name}
-          />
-          <h2>{collection.name}</h2>
-          {navigation.previous && navigation.previous.book !== false &&
-          <Button variant="primary" size="sm" onClick={(e) => this.updateBook(navigation.previous.book.slug)} as={Link} to={'/bible/'+navigation.previous.book.slug} className="mr-2 mt-2">     
-            <FontAwesomeIcon icon="chevron-left" /> {navigation.previous.book.name}
-          </Button>
-          }
-          {chapters.map((chapter,index) => {
-            return(
-              <Button variant="light" size="lg" as={Link} to={'/bible/'+collection.slug+'/'+chapter} className="mr-2 mt-2" key={`chapter_${chapter}`}>{chapter}</Button>
-            )
-          })}
-          {navigation.next && navigation.next.book !== false &&
-          <Button variant="primary" size="sm" onClick={(e) => this.updateBook(navigation.next.book.slug)} as={Link} to={'/bible/'+navigation.next.book.slug} className="mr-2 mt-2">     
-            {navigation.next.book.name} <FontAwesomeIcon icon="chevron-right" />
-          </Button>
-          }
-        </Container>
-      </Fragment>
+      <Container fluid>
+        <Helmet title={`${collection.name} | Holy Bible`} />
+        <h1>Bible</h1>
+        <Breadcrumbs
+          base={(collection.bid < 40) ? "ot" : "nt"}
+          active={collection.name}
+        />
+        <h2>{collection.name}</h2>
+        {navigation.previous && navigation.previous.book !== false &&
+        <Button variant="primary" size="sm" onClick={(e) => this.updateBook(navigation.previous.book.slug)} as={Link} to={'/bible/'+navigation.previous.book.slug} className="mr-2 mt-2">     
+          <FontAwesomeIcon icon="chevron-left" /> {navigation.previous.book.name}
+        </Button>
+        }
+        {chapters.map((chapter,index) => {
+          return(
+            <Button variant="light" size="lg" as={Link} to={'/bible/'+collection.slug+'/'+chapter} className="mr-2 mt-2" key={`chapter_${chapter}`}>{chapter}</Button>
+          )
+        })}
+        {navigation.next && navigation.next.book !== false &&
+        <Button variant="primary" size="sm" onClick={(e) => this.updateBook(navigation.next.book.slug)} as={Link} to={'/bible/'+navigation.next.book.slug} className="mr-2 mt-2">     
+          {navigation.next.book.name} <FontAwesomeIcon icon="chevron-right" />
+        </Button>
+        }
+      </Container>
     );
   }
 }

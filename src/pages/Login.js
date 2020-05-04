@@ -47,7 +47,7 @@ export class Login extends Component {
     }
 
     return (
-      <Container>
+      <Container fluid>
         <Helmet title="Login" />
         <h1>Login</h1>
         <FinalForm
