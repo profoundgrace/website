@@ -40,10 +40,10 @@ export class Login extends Component {
     const { loggingIn, loggedIn, lastLocation } = this.props;
 
     if (loggedIn) {
-      if(lastLocation){
-        return <Redirect to={lastLocation.pathname} />
+      if (lastLocation) {
+        return <Redirect to={lastLocation.pathname} />;
       }
-      return <Redirect to='/' />
+      return <Redirect to="/" />;
     }
 
     return (
@@ -54,10 +54,7 @@ export class Login extends Component {
           onSubmit={this.handleSubmit}
           render={({ handleSubmit, submitting }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              <Field
-                name="username"
-                validate={composeValidators(required)}
-              >
+              <Field name="username" validate={composeValidators(required)}>
                 {({ input, meta }) => (
                   <Form.Group>
                     <Form.Label>Username</Form.Label>
@@ -113,12 +110,12 @@ export class Login extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   loggingIn: isLoggingIn(state),
   loggedIn: isLoggedIn(state)
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       ...authActions

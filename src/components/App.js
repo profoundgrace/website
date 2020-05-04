@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import React, { Component, Suspense } from "react";
-import { Switch, Route, withRouter } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import React, { Component, Suspense } from 'react';
+import { Switch, Route, withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { actions as authActions } from 'redux/reducers/auth';
 
-import Header from "components/Header";
-import Footer from "components/Footer";
+import Header from 'components/Header';
+import Footer from 'components/Footer';
 import ToastDrawer from 'components/ToastDrawer/ToastDrawer';
 import SuspenseFallback from 'components/SuspenseFallback/SuspenseFallback';
 
@@ -36,8 +36,8 @@ export class App extends Component {
   render() {
     return (
       <Suspense fallback={<SuspenseFallback />}>
-        <Helmet 
-          defaultTitle="ProfoundGrace.org" 
+        <Helmet
+          defaultTitle="ProfoundGrace.org"
           titleTemplate={`%s | ${process.env.REACT_APP_HTML_TITLE}`}
         />
         <Header />
@@ -60,7 +60,7 @@ export class App extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(
     {
       ...authActions

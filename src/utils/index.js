@@ -26,7 +26,7 @@ export function buildActions(reducer, actions) {
  * @param {object} endpoint Object with `url` and optional `params` object
  * @author ayan4m1 <https://github.com/ayan4m1>
  */
-export const buildUrl = endpoint => {
+export const buildUrl = (endpoint) => {
   // this is defined by webpack.DefinePlugin
   const baseUrl = process.env.REACT_APP_API_URL || 'localhost';
   const { url, params } = endpoint;
@@ -56,7 +56,6 @@ export const getInitialState = () => {
     if (!accessToken) {
       return initialState;
     }
-
 
     const expirationDate = dayjs(JSON.parse(expiration));
 

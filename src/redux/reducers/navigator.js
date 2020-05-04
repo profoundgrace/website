@@ -4,26 +4,26 @@ export const types = buildActions('navigator', [
   'REQUEST_BOOK_NAV',
   'REQUEST_CHAPTER_NAV',
   'REQUEST_NAV_SUCCESS',
-  'REQUEST_NAV_FAILURE',
+  'REQUEST_NAV_FAILURE'
 ]);
 
-const requestBookNavigator = ({book}) => ({
+const requestBookNavigator = ({ book }) => ({
   type: types.REQUEST_BOOK_NAV,
   book
 });
 
-const requestChapterNavigator = ({book, chapter}) => ({
+const requestChapterNavigator = ({ book, chapter }) => ({
   type: types.REQUEST_CHAPTER_NAV,
   book,
   chapter
 });
 
-const requestNavigatorSuccess = nav => ({
+const requestNavigatorSuccess = (nav) => ({
   type: types.REQUEST_NAV_SUCCESS,
   nav
 });
 
-const requestNavigatorFailure = error => ({
+const requestNavigatorFailure = (error) => ({
   type: types.REQUEST_NAV_FAILURE,
   error
 });
@@ -36,7 +36,7 @@ export const actions = {
 };
 
 export const initialState = {
-  navigation:{}
+  navigation: {}
 };
 
 export const reducer = (state = initialState, action = {}) => {

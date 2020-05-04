@@ -9,33 +9,33 @@ export const types = buildActions('book', [
   'REQUEST_CHAPTER_FAILURE'
 ]);
 
-const requestBook = book => ({
+const requestBook = (book) => ({
   type: types.REQUEST_BOOK,
   book
 });
 
-const requestBookSuccess = book => ({
+const requestBookSuccess = (book) => ({
   type: types.REQUEST_BOOK_SUCCESS,
   book
 });
 
-const requestBookFailure = error => ({
+const requestBookFailure = (error) => ({
   type: types.REQUEST_BOOK_FAILURE,
   error
 });
 
-const requestChapter = ({book, chapter}) => ({
+const requestChapter = ({ book, chapter }) => ({
   type: types.REQUEST_CHAPTER,
   book,
   chapter
 });
 
-const requestChapterSuccess = chapter => ({
+const requestChapterSuccess = (chapter) => ({
   type: types.REQUEST_CHAPTER_SUCCESS,
   chapter
 });
 
-const requestChapterFailure = error => ({
+const requestChapterFailure = (error) => ({
   type: types.REQUEST_CHAPTER_FAILURE,
   error
 });

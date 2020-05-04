@@ -6,6 +6,6 @@ import { createSelector } from 'reselect';
  * Modified by:
  * @author daviddyess <https://github.com/daviddyess>
  */
-export const getToasts = state => state.toast;
+export const getToasts = (state) => state.toast;
 
-export const getQueue = createSelector(getToasts, toast => toast.queue);
+export const getQueue = createSelector(getToasts, (toast) => toast.queue);

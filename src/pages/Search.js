@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 //import { Link } from 'react-router-dom';
-import { Button, Container, Form} from 'react-bootstrap';
+import { Button, Container, Form } from 'react-bootstrap';
 import { actions as booksActions } from 'redux/reducers/books';
 import { getBooks } from 'redux/selectors/books';
 import { Breadcrumbs } from 'components/Breadcrumbs';
@@ -16,13 +16,13 @@ export class Search extends Component {
     match: PropTypes.object
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       submitting: false,
       submitted: false,
       query: ''
-    }
+    };
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
@@ -49,16 +49,16 @@ export class Search extends Component {
     fetch('api/mailer', {
       method: 'post',
       headers: {
-        'Accept': 'application/json, text/plain, */*',
+        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ name })
     }).then((res) => {
-      if(res.status === 200){
-        this.setState({ submitted: true })
+      if (res.status === 200) {
+        this.setState({ submitted: true });
       }
-    })
-  }
+    });
+  };
 
   render() {
     const { query } = this.state;
@@ -71,41 +71,38 @@ export class Search extends Component {
     } else {
       button = <Button type="submit">Search</Button>;
     }
-    
+
     return (
-        <Container fluid>
-          <Helmet title="Bible Search" />
-          <h1>Bible</h1>
-          <Breadcrumbs 
-            links={[{name: "Holy Bible", url: "/bible"}]}
-            active="Search"
+      <Container fluid>
+        <Helmet title="Bible Search" />
+        <h1>Bible</h1>
+        <Breadcrumbs
+          links={[{ name: 'Holy Bible', url: '/bible' }]}
+          active="Search"
+        />
+        <Form inline onSubmit={this.submitForm}>
+          <Form.Control
+            type="text"
+            name="query"
+            placeholder="Search"
+            value={query}
+            onChange={this.handleInputChange}
+            className="mr-sm-2"
+            required
           />
-          <Form inline onSubmit={this.submitForm}>
-            <Form.Control
-              type="text"
-              name="query"
-              placeholder="Search"
-              value={query}
-              onChange={this.handleInputChange}
-              className="mr-sm-2"
-              required
-            />
-            {button}
-          </Form>
-        </Container>
+          {button}
+        </Form>
+      </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   collection: getBooks(state)
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators({ ...booksActions }, dispatch)
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Search);
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

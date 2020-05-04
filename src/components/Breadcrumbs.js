@@ -9,10 +9,10 @@ export class Breadcrumbs extends Component {
     active: PropTypes.string
   };
 
-  basePath(base){
-    switch(base){
+  basePath(base) {
+    switch (base) {
       case 'bible':
-        return(
+        return (
           <Fragment>
             <li className="breadcrumb-item">
               <Link to="/">Home</Link>
@@ -23,7 +23,7 @@ export class Breadcrumbs extends Component {
           </Fragment>
         );
       case 'ot':
-        return(
+        return (
           <Fragment>
             <li className="breadcrumb-item">
               <Link to="/">Home</Link>
@@ -37,7 +37,7 @@ export class Breadcrumbs extends Component {
           </Fragment>
         );
       case 'nt':
-        return(
+        return (
           <Fragment>
             <li className="breadcrumb-item">
               <Link to="/">Home</Link>
@@ -51,11 +51,11 @@ export class Breadcrumbs extends Component {
           </Fragment>
         );
       default:
-        return(
+        return (
           <li className="breadcrumb-item">
             <Link to="/">Home</Link>
           </li>
-        )
+        );
     }
   }
 
@@ -65,22 +65,23 @@ export class Breadcrumbs extends Component {
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           {this.basePath(base)}
-          {links && links.map((item, index) => {
-            return(
-              <li key={index} className="breadcrumb-item">
-                <Link to={item.url}>{item.name}</Link>
-              </li>
-            )
-          })}
+          {links &&
+            links.map((item, index) => {
+              return (
+                <li key={index} className="breadcrumb-item">
+                  <Link to={item.url}>{item.name}</Link>
+                </li>
+              );
+            })}
           <li className="breadcrumb-item active" aria-current="page">
             <span className="active">{active}</span>
           </li>
         </ol>
       </nav>
-    )
+    );
   }
 
-  Item(){
+  Item() {
     return 'yes';
   }
 }

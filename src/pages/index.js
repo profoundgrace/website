@@ -1,10 +1,10 @@
 import { lazy } from 'react';
 
 export const imports = {
-  Bible: () =>
-    import(/* webpackChunkName: "bible" */ 'pages/Bible'),
+  Bible: () => import(/* webpackChunkName: "bible" */ 'pages/Bible'),
   Book: () => import(/* webpackChunkName: "bible-book" */ 'pages/Book'),
-  Chapter: () => import(/* webpackChunkName: "bible-chapter" */ 'pages/Chapter'),
+  Chapter: () =>
+    import(/* webpackChunkName: "bible-chapter" */ 'pages/Chapter'),
   Home: () => import(/* webpackChunkName: "home" */ 'pages/Home'),
   Login: () => import(/* webpackChunkName: "login" */ 'pages/Login'),
   NotFound: () => import(/* webpackChunkName: "not-found" */ 'pages/NotFound'),

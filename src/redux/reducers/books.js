@@ -10,12 +10,12 @@ const requestBooks = () => ({
   type: types.REQUEST_BOOKS
 });
 
-const requestBooksSuccess = books => ({
+const requestBooksSuccess = (books) => ({
   type: types.REQUEST_BOOKS_SUCCESS,
   books
 });
 
-const requestBooksFailure = error => ({
+const requestBooksFailure = (error) => ({
   type: types.REQUEST_BOOKS_FAILURE,
   error
 });

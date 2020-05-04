@@ -5,19 +5,19 @@
  * Modified by:
  * @author daviddyess <https://github.com/daviddyess>
  */
-export const matches = fieldName => (value, allValues) =>
+export const matches = (fieldName) => (value, allValues) =>
   value === allValues[fieldName] ? undefined : 'matches';
 
-export const required = value => (value ? undefined : 'required');
+export const required = (value) => (value ? undefined : 'required');
 
-export const email = value =>
+export const email = (value) =>
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/.test(
     value
   )
     ? undefined
     : 'email';
 
-export const length = (minimum = 0, maximum = Infinity) => value => {
+export const length = (minimum = 0, maximum = Infinity) => (value) => {
   if (!value || !value.length) {
     return 'min-length';
   }

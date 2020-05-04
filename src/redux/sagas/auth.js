@@ -4,7 +4,7 @@ import { all, call, put, takeLatest, take, select } from 'redux-saga/effects';
 import request from 'utils/request';
 import { actions, types } from 'redux/reducers/auth';
 import { actions as toastActions } from 'redux/reducers/toast';
-import { isLoggedIn/*, getUser*/ } from 'redux/selectors/auth';
+import { isLoggedIn /*, getUser*/ } from 'redux/selectors/auth';
 /**
  * Based on code by:
  * @author ayan4m1 <https://github.com/ayan4m1>
@@ -41,7 +41,7 @@ function* requestTokenWorker({ username, password }) {
       };
 
       const expiration = created + 604700000; // 1 week (ms)
-      
+
       yield put(actions.requestTokenSuccess({ user, token, expiration }));
     } else if (result.error) {
       throw result.error;
@@ -80,7 +80,7 @@ function* requestCurrentUserWorker() {
         name: data.username,
         id: data.userid,
         data: data.data
-      }
+      };
       yield put(actions.requestCurrentUserSuccess(user));
     } else if (result.error) {
       throw result.error;
@@ -136,7 +136,7 @@ function* loginUserWorker({ username, password }) {
         })
       );
     }
-    
+
     /*
     let user = yield select(getUser);
 
@@ -206,9 +206,7 @@ function* logoutUserWorker() {
   }
 }
 
-function* registerUserWorker({
-  details: { username, email, password }
-}) {
+function* registerUserWorker({ details: { username, email, password } }) {
   try {
     const endpoint = {
       url: '/auth/register',
@@ -284,5 +282,5 @@ export const watchers = {
 };
 
 export default function* saga() {
-  yield all(Object.values(watchers).map(watcher => watcher()));
+  yield all(Object.values(watchers).map((watcher) => watcher()));
 }

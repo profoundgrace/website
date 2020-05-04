@@ -8,7 +8,7 @@ function* requestBookWorker({ book }) {
   try {
     let cache = yield select(getBookCache);
 
-    if(!cache[book]){
+    if (!cache[book]) {
       let endpoint = {};
       endpoint = {
         url: `/bible/book/${book}`,
@@ -24,9 +24,9 @@ function* requestBookWorker({ book }) {
         const response = {
           cache,
           request: data
-        }
+        };
         // Populate Navigation
-        yield put(navActions.requestBookNavigator({book:data.bid}));
+        yield put(navActions.requestBookNavigator({ book: data.bid }));
         yield put(actions.requestBookSuccess(response));
       } else if (bible.error) {
         throw bible.error;
@@ -37,9 +37,9 @@ function* requestBookWorker({ book }) {
       const response = {
         cache,
         request: cache[book]
-      }
+      };
       // Populate Navigation
-      yield put(navActions.requestBookNavigator({book:cache[book].bid}));
+      yield put(navActions.requestBookNavigator({ book: cache[book].bid }));
       // Return Cached Book Data
       yield put(actions.requestBookSuccess(response));
     }
@@ -51,13 +51,13 @@ function* requestBookWorker({ book }) {
 function* requestChapterWorker({ book, chapter }) {
   try {
     let cache = yield select(getChapterCache);
-    if(!cache[book]){
+    if (!cache[book]) {
       cache[book] = [];
     }
-    if(!cache[book][chapter]){
+    if (!cache[book][chapter]) {
       let endpoint = {};
 
-      if(isNaN(book)){
+      if (isNaN(book)) {
         endpoint = {
           url: `/bible/book/${book}/${chapter}`,
           method: 'GET'
@@ -74,7 +74,7 @@ function* requestChapterWorker({ book, chapter }) {
         const {
           response: { data }
         } = bible;
-        if(!cache[book]){
+        if (!cache[book]) {
           cache[book] = [];
         }
         cache[book][chapter] = data;
@@ -82,12 +82,14 @@ function* requestChapterWorker({ book, chapter }) {
           cache,
           request: data,
           chapter
-        }
+        };
         // Populate Navigation
-        if(isNaN(book)){
-          yield put(navActions.requestChapterNavigator({book:data[0].bid, chapter}));
+        if (isNaN(book)) {
+          yield put(
+            navActions.requestChapterNavigator({ book: data[0].bid, chapter })
+          );
         } else {
-          yield put(navActions.requestChapterNavigator({book, chapter}));
+          yield put(navActions.requestChapterNavigator({ book, chapter }));
         }
         yield put(actions.requestChapterSuccess(response));
       } else if (bible.error) {
@@ -102,7 +104,12 @@ function* requestChapterWorker({ book, chapter }) {
         chapter
       };
       // Populate Navigation
-      yield put(navActions.requestChapterNavigator({book:cache[book][chapter][0].bid, chapter}));
+      yield put(
+        navActions.requestChapterNavigator({
+          book: cache[book][chapter][0].bid,
+          chapter
+        })
+      );
       // Return Cached Chapter Text Data
       yield put(actions.requestChapterSuccess(response));
     }
@@ -130,5 +137,5 @@ export const watchers = {
 };
 
 export default function* saga() {
-  yield all(Object.values(watchers).map(watcher => watcher()));
+  yield all(Object.values(watchers).map((watcher) => watcher()));
 }

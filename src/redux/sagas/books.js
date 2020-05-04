@@ -7,7 +7,7 @@ function* requestBooksWorker() {
   try {
     const books = yield select(getBooks);
 
-    if(books.length === 0){
+    if (books.length === 0) {
       let endpoint = {};
       endpoint = {
         url: '/bible/books',
@@ -45,5 +45,5 @@ export const watchers = {
 };
 
 export default function* saga() {
-  yield all(Object.values(watchers).map(watcher => watcher()));
+  yield all(Object.values(watchers).map((watcher) => watcher()));
 }

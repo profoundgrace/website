@@ -19,19 +19,22 @@ export class Book extends Component {
     navigation: PropTypes.object
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.updateBook = this.updateBook.bind(this);
   }
 
   componentDidMount() {
-    const { actions, match: { params } } = this.props;
-    
+    const {
+      actions,
+      match: { params }
+    } = this.props;
+
     actions.requestBook(params.book);
   }
 
-  updateBook(book){
+  updateBook(book) {
     const { actions } = this.props;
 
     actions.requestBook(book);
@@ -40,7 +43,7 @@ export class Book extends Component {
   render() {
     const { collection, navigation } = this.props;
     let chapters = [];
-    
+
     for (var i = 1; i <= collection.chapters; i++) {
       chapters[i] = i;
     }
@@ -50,40 +53,61 @@ export class Book extends Component {
         <Helmet title={`${collection.name} | Holy Bible`} />
         <h1>Bible</h1>
         <Breadcrumbs
-          base={(collection.bid < 40) ? "ot" : "nt"}
+          base={collection.bid < 40 ? 'ot' : 'nt'}
           active={collection.name}
         />
         <h2>{collection.name}</h2>
-        {navigation.previous && navigation.previous.book !== false &&
-        <Button variant="primary" size="sm" onClick={(e) => this.updateBook(navigation.previous.book.slug)} as={Link} to={'/bible/'+navigation.previous.book.slug} className="mr-2 mt-2">     
-          <FontAwesomeIcon icon="chevron-left" /> {navigation.previous.book.name}
-        </Button>
-        }
-        {chapters.map((chapter,index) => {
-          return(
-            <Button variant="light" size="lg" as={Link} to={'/bible/'+collection.slug+'/'+chapter} className="mr-2 mt-2" key={`chapter_${chapter}`}>{chapter}</Button>
-          )
+        {navigation.previous && navigation.previous.book !== false && (
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={(e) => this.updateBook(navigation.previous.book.slug)}
+            as={Link}
+            to={'/bible/' + navigation.previous.book.slug}
+            className="mr-2 mt-2"
+          >
+            <FontAwesomeIcon icon="chevron-left" />{' '}
+            {navigation.previous.book.name}
+          </Button>
+        )}
+        {chapters.map((chapter, index) => {
+          return (
+            <Button
+              variant="light"
+              size="lg"
+              as={Link}
+              to={'/bible/' + collection.slug + '/' + chapter}
+              className="mr-2 mt-2"
+              key={`chapter_${chapter}`}
+            >
+              {chapter}
+            </Button>
+          );
         })}
-        {navigation.next && navigation.next.book !== false &&
-        <Button variant="primary" size="sm" onClick={(e) => this.updateBook(navigation.next.book.slug)} as={Link} to={'/bible/'+navigation.next.book.slug} className="mr-2 mt-2">     
-          {navigation.next.book.name} <FontAwesomeIcon icon="chevron-right" />
-        </Button>
-        }
+        {navigation.next && navigation.next.book !== false && (
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={(e) => this.updateBook(navigation.next.book.slug)}
+            as={Link}
+            to={'/bible/' + navigation.next.book.slug}
+            className="mr-2 mt-2"
+          >
+            {navigation.next.book.name} <FontAwesomeIcon icon="chevron-right" />
+          </Button>
+        )}
       </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   collection: getBook(state),
   navigation: getNavigation(state)
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators({ ...bookActions }, dispatch)
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Book);
+export default connect(mapStateToProps, mapDispatchToProps)(Book);

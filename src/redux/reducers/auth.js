@@ -48,7 +48,7 @@ const requestTokenSuccess = ({ user, token, expiration }) => ({
   user
 });
 
-const requestTokenFailure = error => ({
+const requestTokenFailure = (error) => ({
   type: types.REQUEST_TOKEN_FAILURE,
   error
 });
@@ -57,12 +57,12 @@ const requestCurrentUser = () => ({
   type: types.REQUEST_CURRENT_USER
 });
 
-const requestCurrentUserSuccess = user => ({
+const requestCurrentUserSuccess = (user) => ({
   type: types.REQUEST_CURRENT_USER_SUCCESS,
   user
 });
 
-const requestCurrentUserFailure = error => ({
+const requestCurrentUserFailure = (error) => ({
   type: types.REQUEST_CURRENT_USER_FAILURE,
   error
 });
@@ -71,7 +71,7 @@ const loginUserSuccess = () => ({
   type: types.LOGIN_USER_SUCCESS
 });
 
-const loginUserFailure = error => ({
+const loginUserFailure = (error) => ({
   type: types.LOGIN_USER_FAILURE,
   error
 });
@@ -84,12 +84,12 @@ const logoutUserSuccess = () => ({
   type: types.LOGOUT_USER_SUCCESS
 });
 
-const logoutUserFailure = error => ({
+const logoutUserFailure = (error) => ({
   type: types.LOGOUT_USER_FAILURE,
   error
 });
 
-const registerUser = details => ({
+const registerUser = (details) => ({
   type: types.REGISTER_USER,
   details
 });
@@ -98,7 +98,7 @@ const registerUserSuccess = () => ({
   type: types.REGISTER_USER_SUCCESS
 });
 
-const registerUserFailure = error => ({
+const registerUserFailure = (error) => ({
   type: types.REGISTER_USER_FAILURE,
   error
 });

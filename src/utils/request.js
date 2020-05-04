@@ -19,7 +19,7 @@ import { getAuthorization } from 'redux/selectors/auth';
  *
  * @param {object} response The response body
  */
-const successResponse = response => ({
+const successResponse = (response) => ({
   success: true,
   response
 });
@@ -29,7 +29,7 @@ const successResponse = response => ({
  *
  * @param {string} message A string indicating the error message.
  */
-const failureMessage = message => ({
+const failureMessage = (message) => ({
   success: false,
   error: {
     message
@@ -41,7 +41,7 @@ const failureMessage = message => ({
  *
  * @param {Error|object} error An object describing the error
  */
-const failureResponse = error => ({
+const failureResponse = (error) => ({
   success: false,
   error
 });
@@ -58,7 +58,13 @@ class Request {
   }
 
   isUrlProtected(url) {
-    const unprotectedResources = ['auth/login', 'auth/register', 'bible/book', 'bible/bookid', 'bible/books'];
+    const unprotectedResources = [
+      'auth/login',
+      'auth/register',
+      'bible/book',
+      'bible/bookid',
+      'bible/books'
+    ];
 
     for (const resource of unprotectedResources) {
       if (url.startsWith(`/${resource}`)) {
@@ -137,7 +143,7 @@ class Request {
 
         headers.Bearer = `${accessToken}`;
       }
-      
+
       const requestUrl = yield call(buildUrl, endpoint);
 
       // start a race between the request and a timer, cancel the loser

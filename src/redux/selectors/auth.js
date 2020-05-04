@@ -7,39 +7,33 @@ import { createSelector } from 'reselect';
  * Modified by:
  * @author daviddyess <https://github.com/daviddyess>
  */
-export const getAuth = state => state.auth;
+export const getAuth = (state) => state.auth;
 
-export const isLoggingIn = createSelector(getAuth, auth =>
+export const isLoggingIn = createSelector(getAuth, (auth) =>
   Boolean(auth.loggingIn)
 );
 
-export const isLoggingOut = createSelector(getAuth, auth =>
+export const isLoggingOut = createSelector(getAuth, (auth) =>
   Boolean(auth.loggingOut)
 );
 
-export const getCurrentUser = createSelector(
-  getAuth,
-  auth => auth.user
-);
+export const getCurrentUser = createSelector(getAuth, (auth) => auth.user);
 
-export const getError = createSelector(
-  getAuth,
-  auth => auth.error
-);
+export const getError = createSelector(getAuth, (auth) => auth.error);
 
 export const getAuthorization = createSelector(
   getAuth,
-  auth => auth.authorization
+  (auth) => auth.authorization
 );
 
 export const getToken = createSelector(
   getAuthorization,
-  authorization => authorization.accessToken
+  (authorization) => authorization.accessToken
 );
 
 export const getTokenExpiration = createSelector(
   getAuthorization,
-  authorization => authorization.expiration
+  (authorization) => authorization.expiration
 );
 
 export const isLoggedIn = createSelector(
@@ -49,10 +43,10 @@ export const isLoggedIn = createSelector(
 
 export const getRegistration = createSelector(
   getAuth,
-  auth => auth.registration
+  (auth) => auth.registration
 );
 
 export const isRegistering = createSelector(
   getRegistration,
-  registration => registration.registering && !registration.complete
+  (registration) => registration.registering && !registration.complete
 );
