@@ -4,7 +4,7 @@ import { all, call, put, takeLatest, take, select } from 'redux-saga/effects';
 import request from 'utils/request';
 import { actions, types } from 'redux/reducers/auth';
 import { actions as toastActions } from 'redux/reducers/toast';
-import { isLoggedIn /*, getUser*/ } from 'redux/selectors/auth';
+import { isLoggedIn, getCurrentUser } from 'redux/selectors/auth';
 /**
  * Based on code by:
  * @author ayan4m1 <https://github.com/ayan4m1>
@@ -41,8 +41,8 @@ function* requestTokenWorker({ username, password }) {
       };
 
       const expiration = created + 604700000; // 1 week (ms)
-
       yield put(actions.requestTokenSuccess({ user, token, expiration }));
+      yield put(actions.requestCurrentUser());
     } else if (result.error) {
       throw result.error;
     } else {
@@ -62,7 +62,6 @@ function* requestTokenWorker({ username, password }) {
   }
 }
 /* eslint-enable camelcase */
-
 function* requestCurrentUserWorker() {
   try {
     const endpoint = {
@@ -76,11 +75,21 @@ function* requestCurrentUserWorker() {
       const {
         response: { data }
       } = result;
+
+      let privileges = {};
+      if (data.privileges.length > 0) {
+        data.privileges.map((privilege) => {
+          return (privileges[privilege.name] = true);
+        });
+      }
+
       const user = {
         name: data.username,
         id: data.userid,
-        data: data.data
+        data: data.data,
+        privileges
       };
+
       yield put(actions.requestCurrentUserSuccess(user));
     } else if (result.error) {
       throw result.error;
@@ -91,6 +100,10 @@ function* requestCurrentUserWorker() {
     const { message } = error;
 
     yield put(actions.requestCurrentUserFailure(error));
+    // If the User request fails and they have a token, remove the token by performing logout
+    if (localStorage.getItem('accessToken')) {
+      yield put(actions.logoutUser());
+    }
     yield put(
       toastActions.popToast({
         title: 'Error',
@@ -99,6 +112,31 @@ function* requestCurrentUserWorker() {
       })
     );
   }
+}
+/**
+ * Helper function for other Sagas to easily fetch the current user
+ */
+export function* getAuthUser() {
+  let user = yield select(getCurrentUser);
+
+  if (!user) {
+    yield put(actions.requestCurrentUser());
+    const currentUserResult = yield take([
+      types.REQUEST_CURRENT_USER_SUCCESS,
+      types.REQUEST_CURRENT_USER_FAILURE
+    ]);
+
+    if (currentUserResult.type === types.REQUEST_CURRENT_USER_FAILURE) {
+      throw new Error('Failed to fetch current user!');
+    }
+
+    user = currentUserResult.user;
+
+    if (!user) {
+      throw new Error('Received invalid response to current user request!');
+    }
+  }
+  return user;
 }
 
 function* loginUserWorker({ username, password }) {
@@ -138,7 +176,7 @@ function* loginUserWorker({ username, password }) {
     }
 
     /*
-    let user = yield select(getUser);
+    let user = yield select(getCurrentUser);
 
     if (!user) {
       yield put(actions.requestCurrentUser());
@@ -225,9 +263,10 @@ function* registerUserWorker({ details: { username, email, password } }) {
         toastActions.popToast({
           title: 'Success!',
           icon: 'check',
-          message: 'You may now log in.'
+          message: `User: ${username} registered!`
         })
       );
+      yield put(actions.loginUser(username, password));
     } else {
       throw result.error;
     }
