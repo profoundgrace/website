@@ -67,13 +67,16 @@ export class Header extends Component {
                 </Nav.Link>
               )}
             </Nav>
-            <Form inline>
+            <Form inline action="/search" method="get">
               <Form.Control
                 type="text"
-                placeholder="Search"
+                placeholder="Bible Search"
                 className="mr-sm-2"
+                name="q"
               />
-              <Button variant="outline-success">Search</Button>
+              <Button type="submit" variant="success">
+                Search
+              </Button>
             </Form>
             <Nav>
               {loggedIn && user ? (
