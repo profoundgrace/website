@@ -7,6 +7,7 @@ import {
   reducer as navigator,
   initialState as navigatorState
 } from './navigator';
+import { reducer as search, initialState as searchState } from './search';
 import { reducer as toast, initialState as toastState } from './toast';
 
 export const initialState = {
@@ -14,6 +15,7 @@ export const initialState = {
   book: bookState,
   books: booksState,
   navigator: navigatorState,
+  search: searchState,
   toast: toastState
 };
 
@@ -22,5 +24,6 @@ export default combineReducers({
   book,
   books,
   navigator,
+  search,
   toast
 });
