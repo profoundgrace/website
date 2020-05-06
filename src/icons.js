@@ -1,6 +1,8 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 import {
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
   faBook,
   faCheck,
   faChevronCircleLeft,
@@ -16,6 +18,8 @@ import {
 import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
 
 library.add(
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
   faBook,
   faCheck,
   faChevronCircleLeft,

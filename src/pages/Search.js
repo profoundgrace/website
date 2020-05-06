@@ -24,6 +24,7 @@ import {
   getSearchResult
 } from 'redux/selectors/search';
 import { Breadcrumbs } from 'components/Breadcrumbs';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { composeValidators, required } from 'utils/validation';
 import qs from 'querystringify';
 
@@ -79,7 +80,33 @@ export class Search extends Component {
     const queryParams = this.queryParams;
     let active = page || queryParams?.p || 1;
     let items = [];
-    for (let number = 1; number <= pages; number++) {
+
+    if (page > 2) {
+      items.push(
+        <Pagination.Item
+          as={Link}
+          to={`/search/?q=${query}&p=${1}`}
+          onClick={() => this.navigatePager(1)}
+        >
+          <FontAwesomeIcon icon="angle-double-left" />
+        </Pagination.Item>
+      );
+      items.push(
+        <Pagination.Item
+          as={Link}
+          to={`/search/?q=${query}&p=${page - 1}`}
+          onClick={() => this.navigatePager(page - 1)}
+        >
+          <FontAwesomeIcon icon="chevron-left" />
+        </Pagination.Item>
+      );
+    }
+
+    for (
+      let number = page > 5 ? page - 5 : 1;
+      number <= pages && number - 5 <= page && number + 5 >= page - 5;
+      number++
+    ) {
       items.push(
         <Pagination.Item
           as={Link}
@@ -92,6 +119,28 @@ export class Search extends Component {
         </Pagination.Item>
       );
     }
+
+    if (page < pages - 1) {
+      items.push(
+        <Pagination.Item
+          as={Link}
+          to={`/search/?q=${query}&p=${page + 1}`}
+          onClick={() => this.navigatePager(page + 1)}
+        >
+          <FontAwesomeIcon icon="chevron-right" />
+        </Pagination.Item>
+      );
+      items.push(
+        <Pagination.Item
+          as={Link}
+          to={`/search/?q=${query}&p=${pages}`}
+          onClick={() => this.navigatePager(pages)}
+        >
+          <FontAwesomeIcon icon="angle-double-right" />
+        </Pagination.Item>
+      );
+    }
+
     return items;
   }
 
@@ -155,14 +204,6 @@ export class Search extends Component {
                                 Search
                               </Button>
                             )}
-
-                            {/*<Button
-                              variant="outline-danger"
-                              type="reset"
-                              onClick={() => form.reset()}
-                            >
-                              Reset
-                            </Button>*/}
                           </InputGroup.Append>
                         ) : null}
                         {meta.touched && meta.error && (
@@ -201,7 +242,7 @@ export class Search extends Component {
             </Row>
             {result.map((verse, index) => {
               return (
-                <Card className="mb-2">
+                <Card className="mb-2" key={`result-${index}`}>
                   <Card.Header>
                     <Link to={`/bible/${verse.slug}/${verse.ch}`}>
                       {verse.book} {verse.ch}:{verse.ver}
