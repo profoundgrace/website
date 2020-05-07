@@ -1,14 +1,15 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { Col, Container } from 'react-bootstrap';
 
 function NotFound() {
   return (
-    <div className="App">
+    <Container fluid>
       <Helmet title="Page Not Found" />
-      <header className="App-header">
-        <p>404 - Error : Page Not Found</p>
-      </header>
-    </div>
+      <Col md="auto" className="p-4 pt-5">
+        <h4 className="text-center text-info">404 - Error : Page Not Found</h4>
+      </Col>
+    </Container>
   );
 }
 

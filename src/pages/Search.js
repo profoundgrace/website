@@ -164,7 +164,7 @@ export class Search extends Component {
     return (
       <Container fluid>
         <Helmet title="Bible Search" />
-        <h1>Bible</h1>
+        <h1>Bible Search</h1>
         <Breadcrumbs
           links={[{ name: 'Holy Bible', url: '/bible' }]}
           active="Search"
@@ -177,7 +177,7 @@ export class Search extends Component {
           }}
           render={({ form, handleSubmit, submitting, values }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              <Form.Row>
+              <Form.Row className="mb-3">
                 <Col md={{ offset: 3, span: 6 }}>
                   <Field name="query" validate={composeValidators(required)}>
                     {({ input, meta }) => (

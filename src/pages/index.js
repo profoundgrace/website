@@ -1,6 +1,12 @@
 import { lazy } from 'react';
 
 export const imports = {
+  AdminPrivileges: () =>
+    import(/* webpackChunkName: "admin-privileges" */ 'pages/Admin/Privileges'),
+  AdminRoles: () =>
+    import(/* webpackChunkName: "admin-roles" */ 'pages/Admin/Roles'),
+  AdminUsers: () =>
+    import(/* webpackChunkName: "admin-users" */ 'pages/Admin/Users'),
   Bible: () => import(/* webpackChunkName: "bible" */ 'pages/Bible'),
   Book: () => import(/* webpackChunkName: "bible-book" */ 'pages/Book'),
   Chapter: () =>
@@ -12,6 +18,9 @@ export const imports = {
   Search: () => import(/* webpackChunkName: "search" */ 'pages/Search')
 };
 
+export const AdminPrivileges = lazy(imports.AdminPrivileges);
+export const AdminRoles = lazy(imports.AdminRoles);
+export const AdminUsers = lazy(imports.AdminUsers);
 export const Bible = lazy(imports.Bible);
 export const Book = lazy(imports.Book);
 export const Chapter = lazy(imports.Chapter);

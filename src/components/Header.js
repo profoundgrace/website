@@ -3,14 +3,7 @@ import { connect } from 'react-redux';
 import React, { Component, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { Link, NavLink } from 'react-router-dom';
-import {
-  Button,
-  Container,
-  Form,
-  Navbar,
-  Nav,
-  NavDropdown
-} from 'react-bootstrap';
+import { Container, Dropdown, Form, Navbar, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { actions as authActions } from 'redux/reducers/auth';
@@ -74,25 +67,41 @@ export class Header extends Component {
                 className="mr-sm-2"
                 name="q"
               />
-              <Button type="submit" variant="success">
-                Search
-              </Button>
             </Form>
             <Nav>
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id="admin-dropdown">
+                  Administrator
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item as={NavLink} to="/admin/roles">
+                    Roles
+                  </Dropdown.Item>
+                  <Dropdown.Item as={NavLink} to="/admin/privileges">
+                    Privileges
+                  </Dropdown.Item>
+                  <Dropdown.Item as={NavLink} to="/admin/users">
+                    Users
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item as={NavLink} to="/admin/publications">
+                    Publications
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
               {loggedIn && user ? (
-                <NavDropdown title={user.name} id="user-nav-menu">
-                  <NavDropdown.Item href="#action/3.3">
-                    Account
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item
-                    as={NavLink}
-                    to="/login"
-                    onClick={this.logoutUser}
-                  >
-                    Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
+                <Dropdown alignRight>
+                  <Dropdown.Toggle variant="success" id="user-dropdown">
+                    {this.userIcon} {user.name}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Account</Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item href="/login" onClick={this.logoutUser}>
+                      Logout
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               ) : (
                 <Fragment>
                   <Nav.Link as={NavLink} to="/login">
