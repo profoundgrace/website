@@ -12,6 +12,9 @@ import ToastDrawer from 'components/ToastDrawer/ToastDrawer';
 import SuspenseFallback from 'components/SuspenseFallback/SuspenseFallback';
 
 import {
+  AdminPrivileges,
+  AdminRoles,
+  AdminUsers,
   Bible,
   Book,
   Chapter,
@@ -44,6 +47,9 @@ export class App extends Component {
         <ToastDrawer />
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/admin/privileges" component={AdminPrivileges} />
+          <Route exact path="/admin/roles" component={AdminRoles} />
+          <Route exact path="/admin/users" component={AdminUsers} />
           <Route exact path="/bible" component={Bible} />
           <Route exact path="/bible/ot" component={Bible} />
           <Route exact path="/bible/nt" component={Bible} />
