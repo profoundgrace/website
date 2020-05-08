@@ -3,6 +3,10 @@ import { lazy } from 'react';
 export const imports = {
   AdminPrivileges: () =>
     import(/* webpackChunkName: "admin-privileges" */ 'pages/Admin/Privileges'),
+  AdminPublications: () =>
+    import(
+      /* webpackChunkName: "admin-publications" */ 'pages/Admin/Publications'
+    ),
   AdminRoles: () =>
     import(/* webpackChunkName: "admin-roles" */ 'pages/Admin/Roles'),
   AdminUsers: () =>
@@ -19,6 +23,7 @@ export const imports = {
 };
 
 export const AdminPrivileges = lazy(imports.AdminPrivileges);
+export const AdminPublications = lazy(imports.AdminPublications);
 export const AdminRoles = lazy(imports.AdminRoles);
 export const AdminUsers = lazy(imports.AdminUsers);
 export const Bible = lazy(imports.Bible);
