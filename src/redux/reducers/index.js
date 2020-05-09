@@ -12,14 +12,6 @@ import {
   reducer as privilege,
   initialState as privilegeState
 } from './privilege';
-import {
-  reducer as publication,
-  initialState as publicationState
-} from './publication';
-import {
-  reducer as publications,
-  initialState as publicationsState
-} from './publications';
 import { reducer as role, initialState as roleState } from './role';
 import { reducer as search, initialState as searchState } from './search';
 import { reducer as toast, initialState as toastState } from './toast';
@@ -32,8 +24,6 @@ export const initialState = {
   editor: editorState,
   navigator: navigatorState,
   privilege: privilegeState,
-  publication: publicationState,
-  publications: publicationsState,
   role: roleState,
   search: searchState,
   toast: toastState,
@@ -47,8 +37,6 @@ export default combineReducers({
   editor,
   navigator,
   privilege,
-  publication,
-  publications,
   role,
   search,
   toast,

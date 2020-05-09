@@ -69,26 +69,26 @@ export class Header extends Component {
               />
             </Form>
             <Nav>
-              <Dropdown>
-                <Dropdown.Toggle variant="success" id="admin-dropdown">
-                  Administrator
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item as={NavLink} to="/admin/roles">
-                    Roles
-                  </Dropdown.Item>
-                  <Dropdown.Item as={NavLink} to="/admin/privileges">
-                    Privileges
-                  </Dropdown.Item>
-                  <Dropdown.Item as={NavLink} to="/admin/users">
-                    Users
-                  </Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item as={NavLink} to="/admin/publications">
-                    Publications
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              {user?.privileges?.ui_admin ? (
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="admin-dropdown">
+                    Administrator
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item as={NavLink} to="/admin/roles">
+                      Roles
+                    </Dropdown.Item>
+                    <Dropdown.Item as={NavLink} to="/admin/privileges">
+                      Privileges
+                    </Dropdown.Item>
+                    <Dropdown.Item as={NavLink} to="/admin/users">
+                      Users
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                  </Dropdown.Menu>
+                </Dropdown>
+              ) : null}
+
               {loggedIn && user ? (
                 <Dropdown alignRight>
                   <Dropdown.Toggle variant="success" id="user-dropdown">

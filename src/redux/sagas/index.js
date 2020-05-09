@@ -6,8 +6,6 @@ import books from './books';
 import editor from './editor';
 import navigator from './navigator';
 import privilege from './privilege';
-import publication from './publication';
-import publications from './publications';
 import role from './role';
 import search from './search';
 import toast from './toast';
@@ -22,8 +20,6 @@ export default function* saga() {
       editor,
       navigator,
       privilege,
-      publication,
-      publications,
       role,
       search,
       toast,

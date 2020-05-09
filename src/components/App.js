@@ -13,7 +13,6 @@ import SuspenseFallback from 'components/SuspenseFallback/SuspenseFallback';
 
 import {
   AdminPrivileges,
-  AdminPublications,
   AdminRoles,
   AdminUsers,
   Bible,
@@ -49,11 +48,6 @@ export class App extends Component {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/admin/privileges" component={AdminPrivileges} />
-          <Route
-            exact
-            path="/admin/publications"
-            component={AdminPublications}
-          />
           <Route exact path="/admin/roles" component={AdminRoles} />
           <Route exact path="/admin/users" component={AdminUsers} />
           <Route exact path="/bible" component={Bible} />
