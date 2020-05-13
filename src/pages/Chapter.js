@@ -32,17 +32,11 @@ export class Chapter extends Component {
       actions,
       match: { params }
     } = this.props;
-    const Book = this.props.book;
+
     const { book, chapter } = params;
 
     actions.requestBook(book);
-    // Page access directly (book data isn't populated)
-    if (!Book.bid) {
-      actions.requestChapter({ book, chapter });
-      // Page accessed by navigation (book data is populated)
-    } else {
-      actions.requestChapter({ book: Book.bid, chapter });
-    }
+    actions.requestChapter({ book, chapter });
   }
 
   updateChapter(chapter) {
