@@ -3,11 +3,12 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
+import { Redirect } from 'react-router-dom';
 import { Form as FinalForm, Field } from 'react-final-form';
 import { Button, Container, Form, InputGroup, Col } from 'react-bootstrap';
 
 import { actions as authActions } from 'redux/reducers/auth';
-import { isRegistering } from 'redux/selectors/auth';
+import { isLoggedIn, isRegistering } from 'redux/selectors/auth';
 import {
   composeValidators,
   required,
@@ -21,7 +22,8 @@ export class Register extends Component {
     registering: PropTypes.bool.isRequired,
     actions: PropTypes.shape({
       registerUser: PropTypes.func.isRequired
-    })
+    }),
+    loggedIn: PropTypes.bool.isRequired
   };
 
   constructor(props) {
@@ -37,7 +39,11 @@ export class Register extends Component {
   }
 
   render() {
-    const { registering } = this.props;
+    const { loggedIn, registering } = this.props;
+
+    if (loggedIn) {
+      return <Redirect to="/" />;
+    }
 
     return (
       <Container fluid>
@@ -231,7 +237,8 @@ export class Register extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  registering: isRegistering(state)
+  registering: isRegistering(state),
+  loggedIn: isLoggedIn(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
