@@ -18,9 +18,16 @@ export class Header extends Component {
 
   constructor(props) {
     super(props);
-    const { actions } = this.props;
+
     this.logoutUser = this.logoutUser.bind(this);
-    actions.requestCurrentUser();
+  }
+
+  componentDidMount() {
+    const { actions, user } = this.props;
+
+    if (!user) {
+      actions.requestCurrentUser();
+    }
   }
 
   logoutUser() {
@@ -54,11 +61,9 @@ export class Header extends Component {
               <Nav.Link as={NavLink} to="/search">
                 Search
               </Nav.Link>
-              {!loggedIn && (
-                <Nav.Link as={NavLink} to="/login">
-                  Login
-                </Nav.Link>
-              )}
+              <Nav.Link as={NavLink} to="/articles">
+                Articles
+              </Nav.Link>
             </Nav>
             <Form inline action="/search" method="get">
               <Form.Control
@@ -70,8 +75,8 @@ export class Header extends Component {
             </Form>
             <Nav>
               {user?.privileges?.ui_admin ? (
-                <Dropdown>
-                  <Dropdown.Toggle variant="success" id="admin-dropdown">
+                <Dropdown className="mr-1">
+                  <Dropdown.Toggle variant="secondary" id="admin-dropdown">
                     Administrator
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -85,19 +90,31 @@ export class Header extends Component {
                       Users
                     </Dropdown.Item>
                     <Dropdown.Divider />
+                    <Dropdown.Item as={NavLink} to="/admin/article-types">
+                      Article Types
+                    </Dropdown.Item>
+                    <Dropdown.Item as={NavLink} to="/admin/articles">
+                      Articles
+                    </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               ) : null}
 
               {loggedIn && user ? (
                 <Dropdown alignRight>
-                  <Dropdown.Toggle variant="success" id="user-dropdown">
+                  <Dropdown.Toggle variant="primary" id="user-dropdown">
                     {this.userIcon} {user.name}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Account</Dropdown.Item>
+                    <Dropdown.Item as={NavLink} to="/user">
+                      Account
+                    </Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item href="/login" onClick={this.logoutUser}>
+                    <Dropdown.Item
+                      as={NavLink}
+                      to="/login"
+                      onClick={this.logoutUser}
+                    >
                       Logout
                     </Dropdown.Item>
                   </Dropdown.Menu>

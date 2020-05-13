@@ -12,9 +12,13 @@ import ToastDrawer from 'components/ToastDrawer/ToastDrawer';
 import SuspenseFallback from 'components/SuspenseFallback/SuspenseFallback';
 
 import {
+  AdminArticles,
+  AdminArticleTypes,
   AdminPrivileges,
   AdminRoles,
   AdminUsers,
+  Articles,
+  Article,
   Bible,
   Book,
   Chapter,
@@ -22,7 +26,8 @@ import {
   Login,
   NotFound,
   Register,
-  Search
+  Search,
+  User
 } from 'pages';
 
 export class App extends Component {
@@ -47,9 +52,16 @@ export class App extends Component {
         <ToastDrawer />
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/admin/articles" component={AdminArticles} />
+          <Route
+            exact
+            path="/admin/article-types"
+            component={AdminArticleTypes}
+          />
           <Route exact path="/admin/privileges" component={AdminPrivileges} />
           <Route exact path="/admin/roles" component={AdminRoles} />
           <Route exact path="/admin/users" component={AdminUsers} />
+          <Route exact path="/articles" component={Articles} />
           <Route exact path="/bible" component={Bible} />
           <Route exact path="/bible/ot" component={Bible} />
           <Route exact path="/bible/nt" component={Bible} />
@@ -58,6 +70,8 @@ export class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/search" component={Search} />
+          <Route exact path="/user" component={User} />
+          <Route exact path="/:articleType/:article" component={Article} />
           <Route component={NotFound} />
         </Switch>
         <Footer />
