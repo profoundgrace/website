@@ -9,6 +9,11 @@ export const getUsers = createSelector(
 
 export const getUser = createSelector(getUsersSelector, (user) => user.user);
 
+export const getUserLoading = createSelector(
+  getUsersSelector,
+  (user) => user.loading
+);
+
 export const getUserPrivileges = createSelector(
   getUsersSelector,
   (user) => user.userPrivileges

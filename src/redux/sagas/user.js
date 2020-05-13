@@ -8,14 +8,14 @@ function* requestUsersWorker() {
   try {
     const endpoint = {
       url: '/auth/users',
-      method: 'GET',
+      method: 'GET'
     };
     const result = yield call(request.execute, { endpoint });
 
     // update user in state or throw an error
     if (result.success) {
       const {
-        response: { data },
+        response: { data }
       } = result;
 
       yield put(actions.requestSuccess({ reqType: 'collection', data }));
@@ -36,14 +36,14 @@ function* requestUserWorker({ user: { _key } }) {
   try {
     const endpoint = {
       url: `/auth/user/${_key}`,
-      method: 'GET',
+      method: 'GET'
     };
     const result = yield call(request.execute, { endpoint });
 
     // update user in state or throw an error
     if (result.success) {
       const {
-        response: { data },
+        response: { data }
       } = result;
 
       yield put(actions.requestSuccess({ reqType: 'user', data }));
@@ -59,17 +59,17 @@ function* requestUserWorker({ user: { _key } }) {
     yield call(helper.errorToast, message);
   }
 }
-
+/*
 function* addUserWorker({ user: { _key, name, description, update } }) {
   try {
     const endpoint = {
       url: !_key ? `/auth/user` : `/auth/user/${_key}`,
-      method: !_key ? 'POST' : 'PUT',
+      method: !_key ? 'POST' : 'PUT'
     };
 
     const data = {
       name,
-      description,
+      description
     };
 
     const result = yield call(request.execute, { endpoint, data });
@@ -80,7 +80,7 @@ function* addUserWorker({ user: { _key, name, description, update } }) {
         title: !update ? 'User Created' : `User Updated`,
         message: !update
           ? `${name} successfully added!`
-          : `${name}  successfully updated!`,
+          : `${name}  successfully updated!`
       });
     } else if (result.error) {
       throw result.error;
@@ -99,7 +99,7 @@ function* deleteUserWorker({ _key }) {
   try {
     const endpoint = {
       url: `/auth/user/${_key}`,
-      method: 'DELETE',
+      method: 'DELETE'
     };
 
     const result = yield call(request.execute, { endpoint });
@@ -108,7 +108,7 @@ function* deleteUserWorker({ _key }) {
       yield put(actions.requestUsers());
       yield call(helper.toast, {
         title: `User Deleted`,
-        message: `User ID ${_key} successfully deleted!`,
+        message: `User ID ${_key} successfully deleted!`
       });
     } else if (result.error) {
       throw result.error;
@@ -122,15 +122,76 @@ function* deleteUserWorker({ _key }) {
     yield call(helper.errorToast, message);
   }
 }
+*/
+function* updatePasswordWorker({ user: { password } }) {
+  try {
+    const endpoint = {
+      url: `/auth/update`,
+      method: 'PUT'
+    };
+
+    const data = {
+      password
+    };
+
+    const result = yield call(request.execute, { endpoint, data });
+
+    if (result.success) {
+      yield call(helper.toast, {
+        title: `User Update`,
+        message: `Password successfully updated!`
+      });
+    } else if (result.error) {
+      throw result.error;
+    } else {
+      throw new Error(`Failed to update User!`);
+    }
+  } catch (error) {
+    const { message } = error;
+
+    yield put(actions.requestFailure(error));
+    yield call(helper.errorToast, message);
+  }
+}
+
+function* updateUserWorker({ user: { _key, email, username } }) {
+  try {
+    const endpoint = {
+      url: `/auth/user`,
+      method: 'PUT'
+    };
+
+    const data = { email, username };
+
+    const result = yield call(request.execute, { endpoint, data });
+
+    if (result.success) {
+      yield put(actions.requestUser({ _key }));
+      yield call(helper.toast, {
+        title: `User Update`,
+        message: `User successfully updated!`
+      });
+    } else if (result.error) {
+      throw result.error;
+    } else {
+      throw new Error(`Failed to update User!`);
+    }
+  } catch (error) {
+    const { message } = error;
+
+    yield put(actions.requestFailure(error));
+    yield call(helper.errorToast, message);
+  }
+}
 
 function* requestUsersWatcher() {
   yield takeLatest(types.REQUEST_USERS, requestUsersWorker);
 }
 
-/*function* requestUserWatcher() {
+function* requestUserWatcher() {
   yield takeLatest(types.REQUEST_USER, requestUserWorker);
 }
-
+/*
 function* addUserWatcher() {
   yield takeLatest(types.ADD_USER, addUserWorker);
 }
@@ -139,18 +200,30 @@ function* deleteUserWatcher() {
   yield takeLatest(types.DELETE_USER, deleteUserWorker);
 }*/
 
+function* updatePasswordWatcher() {
+  yield takeLatest(types.UPDATE_PASSWORD, updatePasswordWorker);
+}
+
+function* updateUserWatcher() {
+  yield takeLatest(types.UPDATE_USER, updateUserWorker);
+}
+
 export const workers = {
   requestUsersWorker,
   requestUserWorker,
-  addUserWorker,
-  deleteUserWorker,
+  //addUserWorker,
+  //deleteUserWorker,
+  updatePasswordWorker,
+  updateUserWorker
 };
 
 export const watchers = {
   requestUsersWatcher,
-  //requestUserWatcher,
+  requestUserWatcher,
   //addUserWatcher,
   //deleteUserWatcher,
+  updatePasswordWatcher,
+  updateUserWatcher
 };
 
 export default function* saga() {
