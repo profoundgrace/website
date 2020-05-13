@@ -1,5 +1,10 @@
 import { combineReducers } from 'redux';
 
+import { reducer as articles, initialState as articlesState } from './articles';
+import {
+  reducer as articleTypes,
+  initialState as articleTypesState
+} from './articleTypes';
 import { reducer as auth, initialState as authState } from './auth';
 import { reducer as book, initialState as bookState } from './book';
 import { reducer as books, initialState as booksState } from './books';
@@ -18,6 +23,8 @@ import { reducer as toast, initialState as toastState } from './toast';
 import { reducer as user, initialState as userState } from './user';
 
 export const initialState = {
+  articles: articlesState,
+  articleTypes: articleTypesState,
   auth: authState,
   book: bookState,
   books: booksState,
@@ -31,6 +38,8 @@ export const initialState = {
 };
 
 export default combineReducers({
+  articles,
+  articleTypes,
   auth,
   book,
   books,

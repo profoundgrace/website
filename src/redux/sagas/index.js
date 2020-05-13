@@ -1,5 +1,7 @@
 import { all, fork } from 'redux-saga/effects';
 
+import articles from './articles';
+import articleTypes from './articleTypes';
 import auth from './auth';
 import book from './book';
 import books from './books';
@@ -14,6 +16,8 @@ import user from './user';
 export default function* saga() {
   yield all(
     [
+      articles,
+      articleTypes,
       auth,
       book,
       books,
