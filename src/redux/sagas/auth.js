@@ -76,19 +76,29 @@ function* requestCurrentUserWorker() {
         response: { data }
       } = result;
 
-      let privileges = {};
-      if (data.privileges.length > 0) {
-        data.privileges.map((privilege) => {
-          return (privileges[privilege.name] = true);
-        });
-      }
-
       const user = {
         name: data.username,
         id: data.userid,
         data: data.data,
-        privileges
+        privileges: data.data.privileges
       };
+
+      const { _key: token, created } = data.sid;
+
+      if (
+        !localStorage.getItem('accessToken') ||
+        localStorage.getItem('accessToken') !== JSON.stringify(token)
+      ) {
+        const expiration = created + 86385714;
+        yield put(
+          actions.requestTokenSuccess({ user: null, token, expiration })
+        );
+        localStorage.setItem('accessToken', JSON.stringify(token));
+        localStorage.setItem(
+          'expiration',
+          JSON.stringify(dayjs(expiration).toISOString())
+        );
+      }
 
       yield put(actions.requestCurrentUserSuccess(user));
     } else if (result.error) {
@@ -221,6 +231,13 @@ function* logoutUserWorker() {
       localStorage.removeItem('expiration');
     }
 
+    const endpoint = {
+      url: '/auth/logout',
+      method: 'POST'
+    };
+
+    yield call(request.execute, { endpoint });
+
     yield put(
       toastActions.popToast({
         title: 'Logged out',
@@ -274,6 +291,13 @@ function* registerUserWorker({ details: { username, email, password } }) {
     const { message } = error;
 
     yield put(actions.registerUserFailure(error));
+    yield put(
+      toastActions.popToast({
+        title: 'Error',
+        icon: 'times-circle',
+        message: 'Username or Email already in use'
+      })
+    );
     yield put(
       toastActions.popToast({
         title: 'Error',
