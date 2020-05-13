@@ -13,15 +13,18 @@ import {
   faChevronUp,
   faEdit,
   faHeart,
+  faInfoCircle,
   faKey,
   faPlus,
   faTimesCircle,
   faTrashAlt,
   faUserCircle,
+  faUserEdit,
   faUserShield
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
+  faCalendar as farCalendar,
   faCheckSquare,
   faHeart as farHeart,
   faSave,
@@ -33,6 +36,7 @@ library.add(
   faAngleDoubleRight,
   faBan,
   faBook,
+  farCalendar,
   faCheck,
   faCheckSquare,
   faChevronCircleLeft,
@@ -43,6 +47,7 @@ library.add(
   faEdit,
   faHeart,
   farHeart,
+  faInfoCircle,
   faKey,
   faPlus,
   faSave,
@@ -50,6 +55,7 @@ library.add(
   faTimesCircle,
   faTrashAlt,
   faUserCircle,
+  faUserEdit,
   faUserShield
 );
 
