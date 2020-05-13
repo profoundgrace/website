@@ -11,7 +11,7 @@ import rootReducer from 'redux/reducers';
 
 import 'icons';
 //import 'bootstrap/dist/css/bootstrap.css';
-import 'bootswatch/dist/litera/bootstrap.min.css';
+//import 'bootswatch/dist/spacelab/bootstrap.min.css';
 import 'index.scss';
 
 import App from 'components/App';

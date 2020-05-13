@@ -1,7 +1,7 @@
-//@import "~bootswatch/dist/litera/variables";
-//@import "~bootstrap/scss/bootstrap";
-//@import "~bootswatch/dist/litera/bootswatch";
+@import "~bootswatch/dist/spacelab/variables";
+@import "sass/variables";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootswatch/dist/spacelab/bootswatch";
 
-//@import 'sass/variables';
+@import "sass/styles";
 @import "components/ToastDrawer/ToastDrawer";
-//@import "sass/styles";
