@@ -1,37 +1,36 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
-import logo from 'static/logo.svg';
+import { Link } from 'react-router-dom';
+import { Button, Col, Container, Jumbotron, Row } from 'react-bootstrap';
+import LatestArticles from 'components/Articles/Latest';
 
 class Home extends Component {
   render() {
     return (
-      <Fragment>
-        <div className="App">
-          <Helmet title="Home" />
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/pages/Home.js</code> and save to reload.
-            </p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
+      <Container fluid>
+        <Helmet title="Home" />
+        <Jumbotron className="mb-3">
+          <h1>Welcome to the New Profoundgrace.org!</h1>
+          <p>
+            We are rebuilding! After a couple of years of neglect, PFG is
+            finally getting some much needed attention.
+          </p>
+          <p>
+            <Button
+              as={Link}
+              to="/blog/welcome-to-profoundgrace"
+              variant="primary"
             >
-              Learn React
-            </a>
-            <p>
-              <a
-                className="App-link"
-                href="https://github.com/daviddyess/react-boilerplate"
-              >
-                React Boilerplate on GitHub
-              </a>
-            </p>
-          </header>
-        </div>
-      </Fragment>
+              Learn more
+            </Button>
+          </p>
+        </Jumbotron>
+        <Row>
+          <Col>
+            <LatestArticles />
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }
