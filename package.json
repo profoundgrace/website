@@ -29,6 +29,7 @@
     "remark-parse": "^8.0.1",
     "remark-react": "^7.0.1",
     "reselect": "^4.0.0",
+    "string-sanitizer": "^1.1.1",
     "unified": "^9.0.0"
   },
   "scripts": {
