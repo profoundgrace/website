@@ -117,7 +117,7 @@ export class Chapter extends Component {
             </Fragment>
           );
         })}
-        <Container className="text-center">
+        <Container className="text-center mt-4">
           {navigation.previous && navigation.previous.book && (
             <Button
               variant="success"
