@@ -40,7 +40,7 @@ export class Login extends Component {
     const { loggingIn, loggedIn, lastLocation } = this.props;
 
     if (loggedIn) {
-      if (lastLocation) {
+      if (lastLocation && lastLocation?.pathname !== '/register') {
         return <Redirect to={lastLocation.pathname} />;
       }
       return <Redirect to="/" />;
