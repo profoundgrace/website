@@ -15,6 +15,8 @@ export const imports = {
     import(/* webpackChunkName: "admin-users" */ 'pages/Admin/Users'),
   Article: () => import(/* webpackChunkName: "article" */ 'pages/Article'),
   Articles: () => import(/* webpackChunkName: "articles" */ 'pages/Articles'),
+  ArticleType: () =>
+    import(/* webpackChunkName: "article-type" */ 'pages/ArticleType'),
   Bible: () => import(/* webpackChunkName: "bible" */ 'pages/Bible'),
   Book: () => import(/* webpackChunkName: "bible-book" */ 'pages/Book'),
   Chapter: () =>
@@ -34,6 +36,7 @@ export const AdminRoles = lazy(imports.AdminRoles);
 export const AdminUsers = lazy(imports.AdminUsers);
 export const Article = lazy(imports.Article);
 export const Articles = lazy(imports.Articles);
+export const ArticleType = lazy(imports.ArticleType);
 export const Bible = lazy(imports.Bible);
 export const Book = lazy(imports.Book);
 export const Chapter = lazy(imports.Chapter);

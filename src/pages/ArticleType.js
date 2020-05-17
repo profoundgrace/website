@@ -13,36 +13,72 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { actions as authActions } from 'redux/reducers/auth';
 import { actions as editorActions } from 'redux/reducers/editor';
 import { actions as articlesActions } from 'redux/reducers/articles';
+import { actions as articleTypesActions } from 'redux/reducers/articleTypes';
 import { getCurrentUser, isLoggedIn } from 'redux/selectors/auth';
 import { getEditorStatus } from 'redux/selectors/editor';
 import { getArticles, getArticlesLoading } from 'redux/selectors/articles';
+import { getArticleType } from 'redux/selectors/articleTypes';
 import DeleteArticleEditor from 'components/Articles/DeleteArticleEditor';
 import ArticleEditor from 'components/Articles/ArticleEditor';
 import Loading from 'components/Loading';
 
-export class Articles extends Component {
+export class ArticleType extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    ArticleType: PropTypes.object,
     collection: PropTypes.array,
     displayEditor: PropTypes.object,
     loading: PropTypes.bool,
     loggedIn: PropTypes.bool.isRequired,
+    match: PropTypes.object,
     user: PropTypes.object
   };
 
   constructor(props) {
     super(props);
+    const {
+      match: {
+        params: { articleType }
+      }
+    } = this.props;
 
     this.state = {
-      links: [],
-      active: 'Articles'
+      links: articleType ? [{ name: 'Articles', url: '/articles' }] : [],
+      active: articleType ? '' : 'Articles'
     };
   }
 
   componentDidMount() {
-    const { actions } = this.props;
+    const {
+      actions,
+      match: {
+        params: { articleType }
+      }
+    } = this.props;
 
-    actions.requestArticles({ articleType: null });
+    actions.requestArticles({ articleType });
+    if (articleType) {
+      actions.requestArticleType({ articleType });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props?.match?.params?.articleType !==
+      prevProps?.match?.params?.articleType
+    ) {
+      const {
+        actions,
+        match: {
+          params: { articleType }
+        }
+      } = this.props;
+
+      actions.requestArticles({ articleType });
+      if (articleType) {
+        actions.requestArticleType({ articleType });
+      }
+    }
   }
 
   disableEditors() {
@@ -82,9 +118,18 @@ export class Articles extends Component {
   }
 
   render() {
-    const { collection, displayEditor, loading, user } = this.props;
-    const { active, links } = this.state;
-
+    const {
+      ArticleType,
+      collection,
+      displayEditor,
+      loading,
+      user
+    } = this.props;
+    let { active, links } = this.state;
+    const subPath = this.props?.match?.params?.articleType;
+    if (subPath && ArticleType?.title) {
+      active = ArticleType?.title;
+    }
     return (
       <Container fluid>
         <Helmet title="Articles" />
@@ -92,6 +137,13 @@ export class Articles extends Component {
         <h1>Articles</h1>
 
         <Breadcrumbs base={null} links={links} active={active} />
+
+        {subPath ? (
+          <Fragment>
+            <h2>{ArticleType?.title}</h2>
+            <h5>{ArticleType?.description}</h5>
+          </Fragment>
+        ) : null}
 
         {user?.privileges?.articles_update && !displayEditor?.articles && (
           <Button
@@ -136,16 +188,18 @@ export class Articles extends Component {
                                       </Link>
                                     </h4>
                                   </Col>
-
-                                  <Col md="auto">
-                                    <h6>
-                                      <Link
-                                        to={`/articles/${articleType.slug}`}
-                                      >
-                                        {articleType?.title}
-                                      </Link>
-                                    </h6>
-                                  </Col>
+                                  {ArticleType?._key !==
+                                  article?.articleTypeId ? (
+                                    <Col md="auto">
+                                      <h6>
+                                        <Link
+                                          to={`/articles/${articleType.slug}`}
+                                        >
+                                          {articleType?.title}
+                                        </Link>
+                                      </h6>
+                                    </Col>
+                                  ) : null}
                                 </Row>
 
                                 <Row>
@@ -255,6 +309,7 @@ export class Articles extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  ArticleType: getArticleType(state),
   collection: getArticles(state),
   displayEditor: getEditorStatus(state),
   loading: getArticlesLoading(state),
@@ -267,10 +322,11 @@ const mapDispatchToProps = (dispatch) => ({
     {
       ...authActions,
       ...editorActions,
-      ...articlesActions
+      ...articlesActions,
+      ...articleTypesActions
     },
     dispatch
   )
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Articles);
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleType);
