@@ -13,17 +13,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { actions as authActions } from 'redux/reducers/auth';
 import { actions as editorActions } from 'redux/reducers/editor';
 import { actions as articlesActions } from 'redux/reducers/articles';
+import { actions as articleTypesActions } from 'redux/reducers/articleTypes';
 import { getCurrentUser, isLoggedIn } from 'redux/selectors/auth';
 import { getEditorStatus } from 'redux/selectors/editor';
-import { getArticles } from 'redux/selectors/articles';
+import { getArticles, getArticlesLoading } from 'redux/selectors/articles';
+import { getArticleType } from 'redux/selectors/articleTypes';
 import DeleteArticleEditor from 'components/Articles/DeleteArticleEditor';
 import ArticleEditor from 'components/Articles/ArticleEditor';
+import Loading from 'components/Loading';
 
 export class Articles extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
+    articleType: PropTypes.object,
     collection: PropTypes.array,
     displayEditor: PropTypes.object,
+    loading: PropTypes.bool,
     loggedIn: PropTypes.bool.isRequired,
     match: PropTypes.object,
     user: PropTypes.object
@@ -31,17 +36,30 @@ export class Articles extends Component {
 
   constructor(props) {
     super(props);
+    const {
+      match: {
+        params: { articleType }
+      }
+    } = this.props;
 
     this.state = {
-      links: [],
-      active: 'Articles'
+      links: articleType ? [{ name: 'Articles', url: '/articles' }] : [],
+      active: articleType ? '' : 'Articles'
     };
   }
 
   componentDidMount() {
-    const { actions } = this.props;
+    const {
+      actions,
+      match: {
+        params: { articleType }
+      }
+    } = this.props;
 
-    actions.requestArticles({ articleType: null });
+    actions.requestArticles({ articleType });
+    if (articleType) {
+      actions.requestArticleType({ articleType });
+    }
   }
 
   disableEditors() {
@@ -81,8 +99,18 @@ export class Articles extends Component {
   }
 
   render() {
-    const { collection, displayEditor, user } = this.props;
-    const { active, links } = this.state;
+    const {
+      articleType,
+      collection,
+      displayEditor,
+      loading,
+      user
+    } = this.props;
+    let { active, links } = this.state;
+    const subPath = this.props?.match?.params?.articleType;
+    if (subPath && articleType?.title) {
+      active = articleType?.title;
+    }
     return (
       <Container fluid>
         <Helmet title="Articles" />
@@ -90,6 +118,13 @@ export class Articles extends Component {
         <h1>Articles</h1>
 
         <Breadcrumbs base={null} links={links} active={active} />
+
+        {subPath ? (
+          <Fragment>
+            <h2>{articleType?.title}</h2>
+            <h5>{articleType?.description}</h5>
+          </Fragment>
+        ) : null}
 
         {user?.privileges?.articles_update && !displayEditor?.articles && (
           <Button
@@ -106,128 +141,137 @@ export class Articles extends Component {
           displayEditor?.articles === true && <ArticleEditor />}
         <Row className="mt-3">
           <Col>
-            {user?.privileges?.articles_view &&
-            collection &&
-            collection?.map &&
-            collection.length > 0 ? (
+            {!loading && collection?.map ? (
               <Fragment>
-                {collection.map((article, index) => {
-                  const {
-                    _key,
-                    articleType,
-                    createdDate,
-                    slug,
-                    text,
-                    title,
-                    updatedDate
-                  } = article;
+                {user?.privileges?.articles_view && collection.length > 0 ? (
+                  <Fragment>
+                    {collection.map((article, index) => {
+                      const {
+                        _key,
+                        articleType,
+                        createdDate,
+                        slug,
+                        text,
+                        title,
+                        updatedDate
+                      } = article;
 
-                  return (
-                    <ListGroup variant="flush" key={`articles_${_key}`}>
-                      <ListGroup.Item className="mb-2">
-                        <Row>
-                          <Col md="auto">
-                            <h4>
-                              <Link to={`/${articleType.slug}/${slug}`}>
-                                {title}
-                              </Link>
-                            </h4>
-                          </Col>
-                          <Col md="auto">
-                            <h6>{articleType?.title}</h6>
-                          </Col>
-                        </Row>
+                      return (
+                        <Fragment>
+                          {article?.status === '1' ? (
+                            <ListGroup variant="flush" key={`articles_${_key}`}>
+                              <ListGroup.Item className="mb-2">
+                                <Row>
+                                  <Col md="auto">
+                                    <h4>
+                                      <Link to={`/${articleType.slug}/${slug}`}>
+                                        {title}
+                                      </Link>
+                                    </h4>
+                                  </Col>
+                                  <Col md="auto">
+                                    <h6>{articleType?.title}</h6>
+                                  </Col>
+                                </Row>
 
-                        <Row>
-                          <Col md="auto">
-                            <FontAwesomeIcon
-                              icon={['fas', 'user-circle']}
-                              color="gray"
-                            />{' '}
-                            {article?.user?.username}
-                          </Col>
-                          <Col md="auto">
-                            <FontAwesomeIcon
-                              icon={['far', 'calendar']}
-                              color="gray"
-                            />{' '}
-                            {this.displayDate(createdDate)}{' '}
-                            {this.displayTime(createdDate)}
-                          </Col>
-                          <Col md="auto">
-                            {updatedDate ? (
-                              <Fragment>
-                                <FontAwesomeIcon
-                                  icon={['fas', 'user-edit']}
-                                  color="gray"
-                                />{' '}
-                                {this.displayDate(updatedDate)}{' '}
-                                {this.displayTime(updatedDate)}
-                              </Fragment>
-                            ) : null}
-                          </Col>
-                          <Col className="text-right">
-                            {user?.privileges?.articles_update && (
-                              <Button
-                                variant="light"
-                                size="sm"
-                                className="mr-2 rounded-circle"
-                                onClick={() => this.articleEditor(_key)}
-                                title={`Edit ${title}`}
-                              >
-                                <FontAwesomeIcon
-                                  icon={['fas', 'edit']}
-                                  size="1x"
-                                />
-                              </Button>
-                            )}{' '}
-                            {user?.privileges?.articles_delete && (
-                              <Button
-                                variant="light"
-                                size="sm"
-                                className="mr-2 rounded-circle"
-                                onClick={() => this.deleteArticleEditor(_key)}
-                                title={`Delete ${title}`}
-                              >
-                                <FontAwesomeIcon
-                                  icon={['fas', 'trash-alt']}
-                                  size="1x"
-                                />
-                              </Button>
-                            )}
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col className="pt-3">
-                            {
-                              unified()
-                                .use(parse)
-                                .use(remark2react)
-                                .processSync(text).result
-                            }
-                          </Col>
-                        </Row>
-                      </ListGroup.Item>
-                      {user?.privileges?.articles_update &&
-                        displayEditor?.article === _key && (
-                          <ListGroup.Item className="mb-2">
-                            <ArticleEditor article={article} />
-                          </ListGroup.Item>
-                        )}
-                      {user?.privileges?.articles_delete &&
-                        displayEditor?.deleteArticle === _key && (
-                          <ListGroup.Item className="mb-2">
-                            <DeleteArticleEditor article={article} />
-                          </ListGroup.Item>
-                        )}
-                    </ListGroup>
-                  );
-                })}
+                                <Row>
+                                  <Col md="auto">
+                                    <FontAwesomeIcon
+                                      icon={['fas', 'user-circle']}
+                                      color="gray"
+                                    />{' '}
+                                    {article?.user?.username}
+                                  </Col>
+                                  <Col md="auto">
+                                    <FontAwesomeIcon
+                                      icon={['far', 'calendar']}
+                                      color="gray"
+                                    />{' '}
+                                    {this.displayDate(createdDate)}{' '}
+                                    {this.displayTime(createdDate)}
+                                  </Col>
+                                  <Col md="auto">
+                                    {updatedDate ? (
+                                      <Fragment>
+                                        <FontAwesomeIcon
+                                          icon={['fas', 'user-edit']}
+                                          color="gray"
+                                        />{' '}
+                                        {this.displayDate(updatedDate)}{' '}
+                                        {this.displayTime(updatedDate)}
+                                      </Fragment>
+                                    ) : null}
+                                  </Col>
+                                  <Col className="text-right">
+                                    {user?.privileges?.articles_update && (
+                                      <Button
+                                        variant="light"
+                                        size="sm"
+                                        className="mr-2 rounded-circle"
+                                        onClick={() => this.articleEditor(_key)}
+                                        title={`Edit ${title}`}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={['fas', 'edit']}
+                                          size="1x"
+                                        />
+                                      </Button>
+                                    )}{' '}
+                                    {user?.privileges?.articles_delete && (
+                                      <Button
+                                        variant="light"
+                                        size="sm"
+                                        className="mr-2 rounded-circle"
+                                        onClick={() =>
+                                          this.deleteArticleEditor(_key)
+                                        }
+                                        title={`Delete ${title}`}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={['fas', 'trash-alt']}
+                                          size="1x"
+                                        />
+                                      </Button>
+                                    )}
+                                  </Col>
+                                </Row>
+                                <Row>
+                                  <Col className="pt-3">
+                                    {
+                                      unified()
+                                        .use(parse)
+                                        .use(remark2react)
+                                        .processSync(text).result
+                                    }
+                                  </Col>
+                                </Row>
+                              </ListGroup.Item>
+                              {user?.privileges?.articles_update &&
+                                displayEditor?.article === _key && (
+                                  <ListGroup.Item className="mb-2">
+                                    <ArticleEditor article={article} />
+                                  </ListGroup.Item>
+                                )}
+                              {user?.privileges?.articles_delete &&
+                                displayEditor?.deleteArticle === _key && (
+                                  <ListGroup.Item className="mb-2">
+                                    <DeleteArticleEditor article={article} />
+                                  </ListGroup.Item>
+                                )}
+                            </ListGroup>
+                          ) : null}
+                        </Fragment>
+                      );
+                    })}
+                  </Fragment>
+                ) : (
+                  <Container className="text-center">
+                    <h5>No Articles Available</h5>
+                  </Container>
+                )}
               </Fragment>
             ) : (
-              <Container className="text-center">
-                <h5>No Articles Available</h5>
-              </Container>
+              <Loading />
             )}
           </Col>
         </Row>
@@ -237,8 +281,10 @@ export class Articles extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  articleType: getArticleType(state),
   collection: getArticles(state),
   displayEditor: getEditorStatus(state),
+  loading: getArticlesLoading(state),
   loggedIn: isLoggedIn(state),
   user: getCurrentUser(state)
 });
@@ -248,7 +294,8 @@ const mapDispatchToProps = (dispatch) => ({
     {
       ...authActions,
       ...editorActions,
-      ...articlesActions
+      ...articlesActions,
+      ...articleTypesActions
     },
     dispatch
   )

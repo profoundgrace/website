@@ -94,7 +94,7 @@ function* deleteArticleTypeWorker({ articleType: { _key } }) {
   }
 }
 
-function* requestArticleTypeWorker({ articleType: { _key } }) {
+function* requestArticleTypeWorker({ articleType: { _key, articleType } }) {
   try {
     yield put(actions.requestArticleTypesLoading(true));
 
@@ -102,7 +102,9 @@ function* requestArticleTypeWorker({ articleType: { _key } }) {
 
     let endpoint = {};
     endpoint = {
-      url: `/articles/type/${_key}`,
+      url: articleType
+        ? `/articles/type/${articleType}`
+        : `/articles/type/id/${_key}`,
       method: 'GET'
     };
     const result = yield call(request.execute, { endpoint });

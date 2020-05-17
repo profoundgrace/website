@@ -62,6 +62,7 @@ export class App extends Component {
           <Route exact path="/admin/roles" component={AdminRoles} />
           <Route exact path="/admin/users" component={AdminUsers} />
           <Route exact path="/articles" component={Articles} />
+          <Route exact path="/articles/:articleType" component={Articles} />
           <Route exact path="/bible" component={Bible} />
           <Route exact path="/bible/ot" component={Bible} />
           <Route exact path="/bible/nt" component={Bible} />

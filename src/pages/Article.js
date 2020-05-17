@@ -22,7 +22,7 @@ import Loading from 'components/Loading';
 export class Articles extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
-    article: PropTypes.array,
+    article: PropTypes.object,
     displayEditor: PropTypes.object,
     loading: PropTypes.bool,
     loggedIn: PropTypes.bool.isRequired,
@@ -99,8 +99,9 @@ export class Articles extends Component {
     } = article;
     links = [
       ...links,
-      { name: articleType?.title, url: `articles/${articleType?.slug}` }
+      { name: articleType?.title, url: `/articles/${articleType?.slug}` }
     ];
+    active = article?.title;
     return (
       <Container fluid>
         <Helmet title={`${title} | ${articleType?.title}`} />
@@ -123,7 +124,9 @@ export class Articles extends Component {
           <Col>
             {!loading ? (
               <Fragment>
-                {user?.privileges?.articles_view && article ? (
+                {user?.privileges?.articles_view &&
+                article &&
+                article?.status === '1' ? (
                   <Fragment>
                     <h4>{title}</h4>
                     <Row>

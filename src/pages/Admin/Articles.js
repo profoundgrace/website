@@ -66,6 +66,19 @@ export class AdminArticles extends Component {
     actions.displayEditor({ editor: 'deleteArticle', status: _key });
   }
 
+  status(status) {
+    switch (status) {
+      case '1':
+        return 'Published';
+      case '2':
+        return 'Draft';
+      case '3':
+        return 'Private';
+      default:
+        return 'Unknown';
+    }
+  }
+
   render() {
     const { collection, displayEditor, user } = this.props;
     const { active, links } = this.state;
@@ -100,8 +113,9 @@ export class AdminArticles extends Component {
                     <th>Administration</th>
                     <th>Type</th>
                     <th>ID</th>
-                    <th>Date</th>
                     <th>Title</th>
+                    <th>Date</th>
+                    <th>Status</th>
                     <th>Slug</th>
                   </tr>
                 </thead>
@@ -113,7 +127,8 @@ export class AdminArticles extends Component {
                       createdDate,
                       /*updatedDate,*/
                       title,
-                      slug
+                      slug,
+                      status
                     } = article;
 
                     return (
@@ -151,8 +166,9 @@ export class AdminArticles extends Component {
                           </td>
                           <td className="text-center">{name}</td>
                           <td className="text-center">{_key}</td>
-                          <td className="text-center">{createdDate}</td>
                           <td className="text-center">{title}</td>
+                          <td className="text-center">{createdDate}</td>
+                          <td className="text-center">{this.status(status)}</td>
                           <td className="text-center">{slug}</td>
                         </tr>
                         {user?.privileges?.articles_update &&
