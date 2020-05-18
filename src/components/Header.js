@@ -64,6 +64,9 @@ export class Header extends Component {
               <Nav.Link as={NavLink} to="/articles">
                 Articles
               </Nav.Link>
+              <Nav.Link as={NavLink} to="/forum">
+                Forum
+              </Nav.Link>
             </Nav>
             <Form inline action="/search" method="get">
               <Form.Control
@@ -95,6 +98,10 @@ export class Header extends Component {
                     </Dropdown.Item>
                     <Dropdown.Item as={NavLink} to="/admin/articles">
                       Articles
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item as={NavLink} to="/admin/forum">
+                      Forum
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>

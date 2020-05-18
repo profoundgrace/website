@@ -22,7 +22,7 @@ export class AdminForum extends Component {
     displayEditor: PropTypes.object,
     loggedIn: PropTypes.bool.isRequired,
     match: PropTypes.object,
-    user: PropTypes.object,
+    user: PropTypes.object
   };
 
   constructor(props) {
@@ -48,7 +48,7 @@ export class AdminForum extends Component {
     const { actions, displayEditor } = this.props;
     actions.displayEditor({
       editor: 'forums',
-      status: !displayEditor.forums,
+      status: !displayEditor.forums
     });
   }
 
@@ -66,13 +66,13 @@ export class AdminForum extends Component {
     const { collection, displayEditor, user } = this.props;
     const { active, links } = this.state;
     return (
-      <Container fluid className="pl-4 pr-4">
-        <Helmet title="Forum Administration" />
+      <Container fluid>
+        <Helmet title="Forum Admin" />
+        <h1>Administration</h1>
         <Breadcrumbs base={null} links={links} active={active} />
         <h2>Forum Admin</h2>
-        {user?.privileges?.update_forums && !displayEditor?.forums && (
+        {user?.privileges?.forums_update && !displayEditor?.forums && (
           <Button
-            variant="success"
             size="sm"
             className="mr-2 mt-2 rounded-pill"
             onClick={() => this.forumsEditor()}
@@ -82,11 +82,11 @@ export class AdminForum extends Component {
             &nbsp; Add a Forum
           </Button>
         )}
-        {user?.privileges?.update_forums && displayEditor?.forums === true && (
+        {user?.privileges?.forums_update && displayEditor?.forums === true && (
           <ForumEditor />
         )}
         <Row className="mt-3">
-          {user?.privileges?.view_forums &&
+          {user?.privileges?.forums_view &&
           collection &&
           collection?.map &&
           collection.length > 0 ? (
@@ -112,7 +112,7 @@ export class AdminForum extends Component {
                     name,
                     title,
                     topics,
-                    replies,
+                    replies
                   } = forum;
 
                   let { parent } = forum;
@@ -125,7 +125,7 @@ export class AdminForum extends Component {
                     <Fragment key={`forums_${_key}`}>
                       <tr>
                         <td className="text-center">
-                          {user?.privileges?.update_forums && (
+                          {user?.privileges?.forums_update && (
                             <Button
                               variant="primary"
                               size="sm"
@@ -139,7 +139,7 @@ export class AdminForum extends Component {
                               />
                             </Button>
                           )}{' '}
-                          {user?.privileges?.delete_forum && (
+                          {user?.privileges?.forums_delete && (
                             <Button
                               variant="danger"
                               size="sm"
@@ -167,7 +167,7 @@ export class AdminForum extends Component {
                         <td className="text-center">{topics}</td>
                         <td className="text-center">{replies}</td>
                       </tr>
-                      {user?.privileges?.update_forums &&
+                      {user?.privileges?.forums_update &&
                         displayEditor?.forum === _key && (
                           <tr>
                             <td colSpan="7">
@@ -175,7 +175,7 @@ export class AdminForum extends Component {
                             </td>
                           </tr>
                         )}
-                      {user?.privileges?.delete_forum &&
+                      {user?.privileges?.forums_delete &&
                         displayEditor?.deleteForum === _key && (
                           <tr>
                             <td colSpan="8">
@@ -203,7 +203,7 @@ const mapStateToProps = (state) => ({
   collection: getForums(state),
   displayEditor: getEditorStatus(state),
   loggedIn: isLoggedIn(state),
-  user: getCurrentUser(state),
+  user: getCurrentUser(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -211,10 +211,10 @@ const mapDispatchToProps = (dispatch) => ({
     {
       ...authActions,
       ...editorActions,
-      ...forumActions,
+      ...forumActions
     },
     dispatch
-  ),
+  )
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminForum);

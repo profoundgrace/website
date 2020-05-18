@@ -9,6 +9,7 @@ import { reducer as auth, initialState as authState } from './auth';
 import { reducer as book, initialState as bookState } from './book';
 import { reducer as books, initialState as booksState } from './books';
 import { reducer as editor, initialState as editorState } from './editor';
+import { reducer as forum, initialState as forumState } from './forum';
 import {
   reducer as navigator,
   initialState as navigatorState
@@ -29,6 +30,7 @@ export const initialState = {
   book: bookState,
   books: booksState,
   editor: editorState,
+  forum: forumState,
   navigator: navigatorState,
   privilege: privilegeState,
   role: roleState,
@@ -44,6 +46,7 @@ export default combineReducers({
   book,
   books,
   editor,
+  forum,
   navigator,
   privilege,
   role,

@@ -31,21 +31,21 @@ export class ForumTopic extends Component {
     loggedIn: PropTypes.bool.isRequired,
     match: PropTypes.object,
     topic: PropTypes.object,
-    user: PropTypes.object,
+    user: PropTypes.object
   };
   constructor(props) {
     super(props);
     const {
       match: {
-        params: { name },
-      },
+        params: { name }
+      }
     } = this.props;
 
     this.state = {
       links: [
         { name: 'Forum', url: '/forum' },
-        { name, url: `/forum/${name}` },
-      ],
+        { name, url: `/forum/${name}` }
+      ]
     };
   }
 
@@ -53,8 +53,8 @@ export class ForumTopic extends Component {
     const {
       actions,
       match: {
-        params: { name, topic },
-      },
+        params: { name, topic }
+      }
     } = this.props;
 
     actions.requestForum({ name });
@@ -76,7 +76,7 @@ export class ForumTopic extends Component {
     const { actions, displayEditor } = this.props;
     actions.displayEditor({
       editor: 'comments',
-      status: !displayEditor.comments,
+      status: !displayEditor.comments
     });
   }
 
@@ -121,8 +121,8 @@ export class ForumTopic extends Component {
 
     const {
       match: {
-        params: { name },
-      },
+        params: { name }
+      }
     } = this.props;
 
     if (!topic) {
@@ -132,31 +132,21 @@ export class ForumTopic extends Component {
     const { links } = this.state;
     const topicUser = this.props.topic.user;
 
-    let topicOfficeSymbol;
-    if (!topicUser?.section) {
-      if (!topicUser?.flight) {
-        topicOfficeSymbol = topicUser?.org;
-      } else {
-        topicOfficeSymbol = topicUser?.flight;
-      }
-    } else {
-      topicOfficeSymbol = topicUser?.section;
-    }
-
     const { _key, created, email, title, text, userId, updated } = topic;
 
     return (
-      <Container fluid className="pl-4 pr-4">
+      <Container fluid>
         <Helmet title={`${forum.title} Forum`} />
+        <h1>Forum</h1>
         <Breadcrumbs base={null} links={links} active={topic.title} />
         <h2>{forum.title} Forum</h2>
         <Alert variant="info">{forum.description}</Alert>
-        {user?.privileges?.update_forums && (
+        {user?.privileges?.forums_update && (
           <Button
             variant="primary"
             size="sm"
             className="mr-2 mt-2 rounded-pill"
-            href="/#/admin/forum"
+            href="/admin/forum"
             title={`Forum Admin`}
           >
             <FontAwesomeIcon icon={['fas', 'th-list']} size="lg" />
@@ -171,18 +161,19 @@ export class ForumTopic extends Component {
                   <Card.Body>
                     <Card.Header as="h3">
                       {title}{' '}
-                      {user?.privileges?.edit_topic && userId === user.id && (
-                        <Button
-                          variant="success"
-                          size="sm"
-                          className="mr-2 rounded-circle float-right"
-                          onClick={() => this.topicEditor(_key)}
-                          title={`Edit Topic ${title}`}
-                        >
-                          <FontAwesomeIcon icon={['fas', 'edit']} size="1x" />
-                        </Button>
-                      )}{' '}
-                      {user?.privileges?.delete_topic && (
+                      {user?.privileges?.forum_topics_update &&
+                        userId === user.id && (
+                          <Button
+                            variant="success"
+                            size="sm"
+                            className="mr-2 rounded-circle float-right"
+                            onClick={() => this.topicEditor(_key)}
+                            title={`Edit Topic ${title}`}
+                          >
+                            <FontAwesomeIcon icon={['fas', 'edit']} size="1x" />
+                          </Button>
+                        )}{' '}
+                      {user?.privileges?.forum_topics_delete && (
                         <Button
                           variant="danger"
                           size="sm"
@@ -206,8 +197,11 @@ export class ForumTopic extends Component {
                           lg="8"
                         >
                           <Card.Text>
-                            by {topicUser?.name.first} {topicUser?.name.last} »{' '}
-                            {this.displayDate(created)} »{' '}
+                            by{' '}
+                            {topicUser?.profile?.name
+                              ? topicUser?.profile?.name
+                              : user?.name}{' '}
+                            » {this.displayDate(created)} »{' '}
                             {this.displayTime(created)}
                             {updated && (
                               <Fragment>
@@ -237,10 +231,9 @@ export class ForumTopic extends Component {
                                   />
                                 )}
                                 <p className="font-weight-bold text-primary">
-                                  {topicUser?.name.first} {topicUser?.name.last}
-                                </p>
-                                <p className="text-uppercase">
-                                  {topicOfficeSymbol}
+                                  {topicUser?.profile?.name
+                                    ? topicUser?.profile?.name
+                                    : user?.name}
                                 </p>
                               </Col>
                             </Row>
@@ -249,12 +242,12 @@ export class ForumTopic extends Component {
                       </Row>
                     </Container>
                   </Card.Body>
-                  {user?.privileges?.edit_topic &&
+                  {user?.privileges?.forum_topics_update &&
                     userId === user.id &&
                     displayEditor?.topic === _key && (
                       <TopicEditor topicForum={forum} topic={topic} />
                     )}
-                  {user?.privileges?.delete_topic &&
+                  {user?.privileges?.forum_topics_delete &&
                     displayEditor?.deleteTopic === _key && (
                       <DeleteTopicEditor topicForum={forum} topic={topic} />
                     )}
@@ -263,7 +256,7 @@ export class ForumTopic extends Component {
             </Card>
           </Col>
         </Row>
-        {user?.privileges?.create_topic && !displayEditor?.comments && (
+        {user?.privileges?.forum_topics_create && !displayEditor?.comments && (
           <Button
             variant="success"
             size="sm"
@@ -275,9 +268,9 @@ export class ForumTopic extends Component {
             &nbsp; New Reply
           </Button>
         )}
-        {user?.privileges?.create_comment &&
+        {user?.privileges?.forum_comments_create &&
           displayEditor?.comments === true && <CommentEditor topic={topic} />}
-        {user?.privileges?.view_topics &&
+        {user?.privileges?.forum_comments_view &&
         collection &&
         collection?.map &&
         collection.length > 0 ? (
@@ -291,7 +284,7 @@ export class ForumTopic extends Component {
                     email,
                     text,
                     updated,
-                    userId,
+                    userId
                   } = comment;
                   const cUser = comment.user;
                   let officeSymbol;
@@ -309,7 +302,7 @@ export class ForumTopic extends Component {
                       <Card.Body key={`comments_${_key}`}>
                         <Card.Header>
                           RE: {title}{' '}
-                          {user?.privileges?.edit_comment &&
+                          {user?.privileges?.forum_comments_update &&
                             userId === user.id && (
                               <Button
                                 variant="success"
@@ -324,7 +317,7 @@ export class ForumTopic extends Component {
                                 />
                               </Button>
                             )}{' '}
-                          {user?.privileges?.delete_comment && (
+                          {user?.privileges?.forum_comments_delete && (
                             <Button
                               variant="danger"
                               size="sm"
@@ -348,8 +341,11 @@ export class ForumTopic extends Component {
                               lg="8"
                             >
                               <Card.Text>
-                                by {cUser.name.first} {cUser.name.last} »{' '}
-                                {this.displayDate(created)} »{' '}
+                                by{' '}
+                                {cUser?.profile?.name
+                                  ? cUser?.profile?.name.first
+                                  : cUser?.username}{' '}
+                                » {this.displayDate(created)} »{' '}
                                 {this.displayTime(created)}
                                 {updated && (
                                   <Fragment>
@@ -378,7 +374,9 @@ export class ForumTopic extends Component {
                                       alt="Gravatar"
                                     />
                                     <p className="font-weight-bold text-primary">
-                                      {cUser.name.first} {cUser.name.last}
+                                      {cUser?.profile?.name
+                                        ? cUser?.profile?.name
+                                        : cUser?.username}
                                     </p>
                                     <p className="text-uppercase">
                                       {officeSymbol}
@@ -390,7 +388,7 @@ export class ForumTopic extends Component {
                           </Row>
                         </Container>
                       </Card.Body>
-                      {user?.privileges?.edit_comment &&
+                      {user?.privileges?.forum_comments_update &&
                         userId === user.id &&
                         displayEditor?.comment === _key && (
                           <CommentEditor
@@ -399,7 +397,7 @@ export class ForumTopic extends Component {
                             comment={comment}
                           />
                         )}
-                      {user?.privileges?.delete_comment &&
+                      {user?.privileges?.forum_comments_delete &&
                         displayEditor?.deleteComment === _key && (
                           <DeleteCommentEditor
                             topicForum={forum}
@@ -435,7 +433,7 @@ const mapStateToProps = (state) => ({
   forum: getForum(state),
   loggedIn: isLoggedIn(state),
   topic: getTopic(state),
-  user: getCurrentUser(state),
+  user: getCurrentUser(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -443,10 +441,10 @@ const mapDispatchToProps = (dispatch) => ({
     {
       ...authActions,
       ...editorActions,
-      ...forumActions,
+      ...forumActions
     },
     dispatch
-  ),
+  )
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForumTopic);

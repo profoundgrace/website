@@ -6,6 +6,7 @@ import auth from './auth';
 import book from './book';
 import books from './books';
 import editor from './editor';
+import forum from './forum';
 import navigator from './navigator';
 import privilege from './privilege';
 import role from './role';
@@ -22,6 +23,7 @@ export default function* saga() {
       book,
       books,
       editor,
+      forum,
       navigator,
       privilege,
       role,

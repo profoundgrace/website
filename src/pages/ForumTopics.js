@@ -24,14 +24,14 @@ export class ForumTopics extends Component {
     forums: PropTypes.array,
     loggedIn: PropTypes.bool.isRequired,
     match: PropTypes.object,
-    user: PropTypes.object,
+    user: PropTypes.object
   };
   constructor(props) {
     super(props);
     const {
       match: {
-        params: { name },
-      },
+        params: { name }
+      }
     } = this.props;
 
     this.state = { links: [{ name: 'Forum', url: '/forum' }], active: name };
@@ -41,8 +41,8 @@ export class ForumTopics extends Component {
     const {
       actions,
       match: {
-        params: { name },
-      },
+        params: { name }
+      }
     } = this.props;
     if (name) {
       actions.requestForum({ name });
@@ -56,8 +56,8 @@ export class ForumTopics extends Component {
       const {
         actions,
         match: {
-          params: { name },
-        },
+          params: { name }
+        }
       } = this.props;
       if (name) {
         actions.requestForum({ name });
@@ -78,7 +78,7 @@ export class ForumTopics extends Component {
     const { actions, displayEditor } = this.props;
     actions.displayEditor({
       editor: 'topics',
-      status: !displayEditor.topics,
+      status: !displayEditor.topics
     });
   }
 
@@ -101,8 +101,9 @@ export class ForumTopics extends Component {
     const { collection, displayEditor, forum, forums, user } = this.props;
     const { active, links } = this.state;
     return (
-      <Container fluid className="pl-4 pr-4">
+      <Container fluid>
         <Helmet title={`${forum.title} Forum`} />
+        <h1>Forum</h1>
         <Breadcrumbs base={null} links={links} active={active} />
         <h2>{forum.title} Forum</h2>
         <Alert variant="info">
@@ -119,7 +120,7 @@ export class ForumTopics extends Component {
           )}
           {forum.description}
         </Alert>
-        {user?.privileges?.view_forums &&
+        {user?.privileges?.forums_view &&
           forums &&
           forums?.map &&
           forums?.length > 0 && (
@@ -132,7 +133,7 @@ export class ForumTopics extends Component {
                   name,
                   title,
                   topics,
-                  replies,
+                  replies
                 } = subforum;
                 return (
                   <Row className="mt-3">
@@ -196,22 +197,21 @@ export class ForumTopics extends Component {
           )}
         {!displayEditor?.topics && (
           <Fragment>
-            {!forum?.options?.adminOnly && user?.privileges?.create_topic && (
-              <Button
-                variant="success"
-                size="sm"
-                className="mr-3 mt-3 rounded-pill"
-                onClick={() => this.topicsEditor()}
-                title={`Create a New Topic`}
-              >
-                <FontAwesomeIcon icon={['fas', 'plus']} size="lg" />
-                &nbsp; New Topic
-              </Button>
-            )}
-            {forum?.options?.adminOnly &&
-              user?.privileges?.create_topic_locked && (
+            {!forum?.options?.adminOnly &&
+              user?.privileges?.forum_topics_create && (
                 <Button
-                  variant="success"
+                  size="sm"
+                  className="mr-3 mt-3 rounded-pill"
+                  onClick={() => this.topicsEditor()}
+                  title={`Create a New Topic`}
+                >
+                  <FontAwesomeIcon icon={['fas', 'plus']} size="lg" />
+                  &nbsp; New Topic
+                </Button>
+              )}
+            {forum?.options?.adminOnly &&
+              user?.privileges?.forum_topics_create_locked && (
+                <Button
                   size="sm"
                   className="mr-3 mt-3 rounded-pill"
                   onClick={() => this.topicsEditor()}
@@ -223,36 +223,28 @@ export class ForumTopics extends Component {
               )}
           </Fragment>
         )}
-        {user?.privileges?.update_forums && (
+        {user?.privileges?.forums_update && (
           <Button
             variant="primary"
             size="sm"
             className="mr-3 mt-3 rounded-pill"
-            href="/#/admin/forum"
+            href="/admin/forum"
             title={`Forum Admin`}
           >
             <FontAwesomeIcon icon={['fas', 'th-list']} size="lg" />
             &nbsp; Forum Admin
           </Button>
         )}
-        {user?.privileges?.create_topic && displayEditor?.topics === true && (
-          <TopicEditor topicForum={forum} />
-        )}
-        {user?.privileges?.view_topics &&
+        {user?.privileges?.forum_topics_create &&
+          displayEditor?.topics === true && <TopicEditor topicForum={forum} />}
+        {user?.privileges?.forum_topics_view &&
         collection &&
         collection?.map &&
         collection.length > 0 ? (
           <Fragment>
             {collection.map((topic, index) => {
-              const {
-                _key,
-                created,
-                replies,
-                title,
-                updated,
-                user,
-                views,
-              } = topic;
+              const { _key, created, replies, title, updated, views } = topic;
+              const topicUser = topic.user;
               return (
                 <Row className="mt-3" key={`topics_${_key}`}>
                   <Col>
@@ -287,8 +279,11 @@ export class ForumTopics extends Component {
                                 </Link>
                               </Card.Title>
                               <Card.Text>
-                                by {user.name.first} {user.name.last} »{' '}
-                                {this.displayDate(created)} »{' '}
+                                by{' '}
+                                {topicUser?.profile?.name
+                                  ? topicUser?.profile?.name
+                                  : user?.name}{' '}
+                                » {this.displayDate(created)} »{' '}
                                 {this.displayTime(created)}
                                 {updated && (
                                   <Fragment>
@@ -345,7 +340,7 @@ const mapStateToProps = (state) => ({
   forum: getForum(state),
   forums: getForums(state),
   loggedIn: isLoggedIn(state),
-  user: getCurrentUser(state),
+  user: getCurrentUser(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -353,10 +348,10 @@ const mapDispatchToProps = (dispatch) => ({
     {
       ...authActions,
       ...editorActions,
-      ...forumActions,
+      ...forumActions
     },
     dispatch
-  ),
+  )
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForumTopics);

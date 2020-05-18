@@ -22,7 +22,7 @@ export class Forum extends Component {
     displayEditor: PropTypes.object,
     loggedIn: PropTypes.bool.isRequired,
     match: PropTypes.object,
-    user: PropTypes.object,
+    user: PropTypes.object
   };
   constructor(props) {
     super(props);
@@ -33,8 +33,8 @@ export class Forum extends Component {
     const {
       actions,
       match: {
-        params: { name },
-      },
+        params: { name }
+      }
     } = this.props;
     if (name) {
       actions.requestForum({ name });
@@ -54,7 +54,7 @@ export class Forum extends Component {
     const { actions, displayEditor } = this.props;
     actions.displayEditor({
       editor: 'forums',
-      status: !displayEditor.forums,
+      status: !displayEditor.forums
     });
   }
 
@@ -67,16 +67,17 @@ export class Forum extends Component {
     const { collection, displayEditor, user } = this.props;
     const { active, links } = this.state;
     return (
-      <Container fluid className="pl-4 pr-4">
+      <Container fluid>
         <Helmet title="Forum" />
+        <h1>Forum</h1>
         <Breadcrumbs base={null} links={links} active={active} />
-        <h2>Forum</h2>
-        {user?.privileges?.update_forums && !displayEditor?.forums && (
+
+        {user?.privileges?.forums_update && !displayEditor?.forums && (
           <Button
             variant="primary"
             size="sm"
             className="mr-2 mt-2 rounded-pill"
-            href="/#/admin/forum"
+            href="/admin/forum"
             title={`Forum Admin`}
           >
             <FontAwesomeIcon icon={['fas', 'th-list']} size="lg" />
@@ -84,7 +85,7 @@ export class Forum extends Component {
           </Button>
         )}
 
-        {user?.privileges?.view_forums &&
+        {user?.privileges?.forums_view &&
         collection &&
         collection?.map &&
         collection.length > 0 ? (
@@ -97,7 +98,7 @@ export class Forum extends Component {
                 name,
                 title,
                 topics,
-                replies,
+                replies
               } = forum;
               return (
                 <Row className="mt-3">
@@ -171,7 +172,7 @@ const mapStateToProps = (state) => ({
   displayEditor: getEditorStatus(state),
   forum: getForum(state),
   loggedIn: isLoggedIn(state),
-  user: getCurrentUser(state),
+  user: getCurrentUser(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -179,10 +180,10 @@ const mapDispatchToProps = (dispatch) => ({
     {
       ...authActions,
       ...editorActions,
-      ...forumActions,
+      ...forumActions
     },
     dispatch
-  ),
+  )
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Forum);
