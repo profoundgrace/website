@@ -14,6 +14,7 @@ import SuspenseFallback from 'components/SuspenseFallback/SuspenseFallback';
 import {
   AdminArticles,
   AdminArticleTypes,
+  AdminForum,
   AdminPrivileges,
   AdminRoles,
   AdminUsers,
@@ -22,6 +23,9 @@ import {
   Bible,
   Book,
   Chapter,
+  Forum,
+  ForumTopic,
+  ForumTopics,
   Home,
   Login,
   NotFound,
@@ -58,6 +62,7 @@ export class App extends Component {
             path="/admin/article-types"
             component={AdminArticleTypes}
           />
+          <Route exact path="/admin/forum" component={AdminForum} />
           <Route exact path="/admin/privileges" component={AdminPrivileges} />
           <Route exact path="/admin/roles" component={AdminRoles} />
           <Route exact path="/admin/users" component={AdminUsers} />
@@ -68,6 +73,9 @@ export class App extends Component {
           <Route exact path="/bible/nt" component={Bible} />
           <Route exact path="/bible/:book" component={Book} />
           <Route exact path="/bible/:book/:chapter" component={Chapter} />
+          <Route exact path="/forum" component={Forum} />
+          <Route exact path="/forum/:name" component={ForumTopics} />
+          <Route exact path="/forum/:name/:topic" component={ForumTopic} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/search" component={Search} />
