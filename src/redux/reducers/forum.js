@@ -1,6 +1,7 @@
 import { buildActions } from 'utils';
 
 export const types = buildActions('forum', [
+  'REQUEST_FORUM_LOADING',
   'REQUEST_FORUM',
   'REQUEST_FORUMS',
   'REQUEST_SUBFORUMS',
@@ -20,111 +21,117 @@ export const types = buildActions('forum', [
   'META_DELETE_COMMENT',
   'REQUEST_SUCCESS',
   'REQUEST_FAILURE',
-  'RESET',
+  'RESET'
 ]);
+
+const requestForumLoading = (status) => ({
+  type: types.REQUEST_FORUM_LOADING,
+  status
+});
 
 const requestForum = (forum) => ({
   type: types.REQUEST_FORUM,
-  forum,
+  forum
 });
 
 const requestForums = (forum) => ({
   type: types.REQUEST_FORUMS,
-  forum,
+  forum
 });
 
 const requestSubforums = (forum) => ({
   type: types.REQUEST_SUBFORUMS,
-  forum,
+  forum
 });
 
 const requestForumTopics = (forum) => ({
   type: types.REQUEST_FORUM_TOPICS,
-  forum,
+  forum
 });
 
 const requestTopic = (topic) => ({
   type: types.REQUEST_TOPIC,
-  topic,
+  topic
 });
 
 const requestTopicComments = (topic) => ({
   type: types.REQUEST_TOPIC_COMMENTS,
-  topic,
+  topic
 });
 
 const addForum = (details) => ({
   type: types.ADD_FORUM,
-  details,
+  details
 });
 
 const addTopic = (details) => ({
   type: types.ADD_TOPIC,
-  details,
+  details
 });
 
 const addComment = (details) => ({
   type: types.ADD_COMMENT,
-  details,
+  details
 });
 
 const deleteForum = (forum) => ({
   type: types.DELETE_FORUM,
-  forum,
+  forum
 });
 
 const deleteTopic = (topic) => ({
   type: types.DELETE_TOPIC,
-  topic,
+  topic
 });
 
 const deleteComment = (comment) => ({
   type: types.DELETE_COMMENT,
-  comment,
+  comment
 });
 
 const metaAddTopic = (details) => ({
   type: types.META_ADD_TOPIC,
-  details,
+  details
 });
 
 const metaAddComment = (details) => ({
   type: types.META_ADD_COMMENT,
-  details,
+  details
 });
 
 const metaAddView = (details) => ({
   type: types.META_ADD_VIEW,
-  details,
+  details
 });
 
 const metaDeleteTopic = (details) => ({
   type: types.META_DELETE_TOPIC,
-  details,
+  details
 });
 
 const metaDeleteComment = (details) => ({
   type: types.META_DELETE_COMMENT,
-  details,
+  details
 });
 
 const requestSuccess = ({ reqType, data }) => ({
   type: types.REQUEST_SUCCESS,
   reqType,
-  data,
+  data
 });
 
 const requestFailure = (error) => ({
   type: types.REQUEST_FAILURE,
-  error,
+  error
 });
 
 const reset = (reqType) => ({
   type: types.RESET,
-  reqType,
+  reqType
 });
 
 export const actions = {
+  requestForumLoading,
   requestForum,
   requestForums,
   requestSubforums,
@@ -144,7 +151,7 @@ export const actions = {
   metaDeleteComment,
   requestSuccess,
   requestFailure,
-  reset,
+  reset
 };
 
 export const initialState = {
@@ -152,27 +159,36 @@ export const initialState = {
   children: [],
   collection: [],
   comments: [],
+  loading: false,
   forum: {},
   topic: {},
-  topics: [],
+  topics: []
 };
 
 export const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
+    case types.REQUEST_FORUM_LOADING:
+      return {
+        ...state,
+        loading: action.status
+      };
     case types.REQUEST_SUCCESS:
       return {
         ...state,
         [action.reqType]: action.data,
+        loading: false
       };
     case types.REQUEST_FAILURE:
       return {
         ...state,
         error: action.error,
+        loading: false
       };
     case types.RESET:
       return {
         ...state,
         [action.reqType]: {},
+        loading: false
       };
     default:
       return state;

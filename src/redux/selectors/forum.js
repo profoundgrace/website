@@ -2,6 +2,11 @@ import { createSelector } from 'reselect';
 
 export const getForumsSelector = (state) => state.forum;
 
+export const getForumLoading = createSelector(
+  getForumsSelector,
+  (forum) => forum.loading
+);
+
 export const getForums = createSelector(
   getForumsSelector,
   (forum) => forum.collection

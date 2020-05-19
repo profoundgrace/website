@@ -16,11 +16,17 @@ import { actions as editorActions } from 'redux/reducers/editor';
 import { actions as forumActions } from 'redux/reducers/forum';
 import { getCurrentUser, isLoggedIn } from 'redux/selectors/auth';
 import { getEditorStatus } from 'redux/selectors/editor';
-import { getForum, getTopic, getComments } from 'redux/selectors/forum';
+import {
+  getForum,
+  getForumLoading,
+  getTopic,
+  getComments
+} from 'redux/selectors/forum';
 import CommentEditor from 'components/Forum/CommentEditor';
 import DeleteCommentEditor from 'components/Forum/DeleteCommentEditor';
 import DeleteTopicEditor from 'components/Forum/DeleteTopicEditor';
 import TopicEditor from 'components/Forum/TopicEditor';
+import Loading from 'components/Loading';
 
 export class ForumTopic extends Component {
   static propTypes = {
@@ -28,6 +34,7 @@ export class ForumTopic extends Component {
     collection: PropTypes.array,
     displayEditor: PropTypes.object,
     forum: PropTypes.object,
+    loading: PropTypes.bool,
     loggedIn: PropTypes.bool.isRequired,
     match: PropTypes.object,
     topic: PropTypes.object,
@@ -35,17 +42,9 @@ export class ForumTopic extends Component {
   };
   constructor(props) {
     super(props);
-    const {
-      match: {
-        params: { name }
-      }
-    } = this.props;
 
     this.state = {
-      links: [
-        { name: 'Forum', url: '/forum' },
-        { name, url: `/forum/${name}` }
-      ]
+      links: [{ name: 'Forum', url: '/forum' }]
     };
   }
 
@@ -117,7 +116,14 @@ export class ForumTopic extends Component {
   }
 
   render() {
-    const { collection, displayEditor, forum, topic, user } = this.props;
+    const {
+      collection,
+      displayEditor,
+      forum,
+      loading,
+      topic,
+      user
+    } = this.props;
 
     const {
       match: {
@@ -129,7 +135,8 @@ export class ForumTopic extends Component {
       return <Redirect to={`/forum/${name}`} />;
     }
 
-    const { links } = this.state;
+    let { links } = this.state;
+    links = [...links, { name: forum?.title, url: `/forum/${forum?.name}` }];
     const topicUser = this.props.topic.user;
 
     const { _key, created, email, title, text, userId, updated } = topic;
@@ -138,178 +145,39 @@ export class ForumTopic extends Component {
       <Container fluid>
         <Helmet title={`${forum.title} Forum`} />
         <h1>Forum</h1>
-        <Breadcrumbs base={null} links={links} active={topic.title} />
-        <h2>{forum.title} Forum</h2>
-        <Alert variant="info">{forum.description}</Alert>
-        {user?.privileges?.forums_update && (
-          <Button
-            variant="primary"
-            size="sm"
-            className="mr-2 mt-2 rounded-pill"
-            href="/admin/forum"
-            title={`Forum Admin`}
-          >
-            <FontAwesomeIcon icon={['fas', 'th-list']} size="lg" />
-            &nbsp; Forum Admin
-          </Button>
-        )}
-        <Row className="mt-3">
-          <Col>
-            <Card>
-              {topic && (
-                <Fragment>
-                  <Card.Body>
-                    <Card.Header as="h3">
-                      {title}{' '}
-                      {user?.privileges?.forum_topics_update &&
-                        userId === user.id && (
-                          <Button
-                            variant="success"
-                            size="sm"
-                            className="mr-2 rounded-circle float-right"
-                            onClick={() => this.topicEditor(_key)}
-                            title={`Edit Topic ${title}`}
-                          >
-                            <FontAwesomeIcon icon={['fas', 'edit']} size="1x" />
-                          </Button>
-                        )}{' '}
-                      {user?.privileges?.forum_topics_delete && (
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          className="mr-2 rounded-circle float-right"
-                          onClick={() => this.deleteTopicEditor(_key)}
-                          title={`Delete Topic ${title}`}
-                        >
-                          <FontAwesomeIcon
-                            icon={['fas', 'trash-alt']}
-                            size="1x"
-                          />
-                        </Button>
-                      )}
-                    </Card.Header>
-                    <Container fluid>
-                      <Row>
-                        <Col
-                          className="border border-secondary"
-                          sm="8"
-                          md="6"
-                          lg="8"
-                        >
-                          <Card.Text>
-                            by{' '}
-                            {topicUser?.profile?.name
-                              ? topicUser?.profile?.name
-                              : user?.name}{' '}
-                            » {this.displayDate(created)} »{' '}
-                            {this.displayTime(created)}
-                            {updated && (
-                              <Fragment>
-                                {' '}
-                                « Updated: {this.displayDate(updated)} «{' '}
-                                {this.displayTime(updated)}
-                              </Fragment>
-                            )}
-                          </Card.Text>
-                          <div className="mb-3 text-break h5">
-                            {
-                              unified()
-                                .use(parse)
-                                .use(remark2react)
-                                .processSync(text).result
-                            }
-                          </div>
-                        </Col>
-                        <Col className="border border-secondary">
-                          <Container fluid>
-                            <Row>
-                              <Col>
-                                {email && (
-                                  <img
-                                    src={this.gravatar(email)}
-                                    alt="Gravatar"
-                                  />
-                                )}
-                                <p className="font-weight-bold text-primary">
-                                  {topicUser?.profile?.name
-                                    ? topicUser?.profile?.name
-                                    : user?.name}
-                                </p>
-                              </Col>
-                            </Row>
-                          </Container>
-                        </Col>
-                      </Row>
-                    </Container>
-                  </Card.Body>
-                  {user?.privileges?.forum_topics_update &&
-                    userId === user.id &&
-                    displayEditor?.topic === _key && (
-                      <TopicEditor topicForum={forum} topic={topic} />
-                    )}
-                  {user?.privileges?.forum_topics_delete &&
-                    displayEditor?.deleteTopic === _key && (
-                      <DeleteTopicEditor topicForum={forum} topic={topic} />
-                    )}
-                </Fragment>
-              )}
-            </Card>
-          </Col>
-        </Row>
-        {user?.privileges?.forum_topics_create && !displayEditor?.comments && (
-          <Button
-            variant="success"
-            size="sm"
-            className="mr-2 mt-2 rounded-pill"
-            onClick={() => this.commentsEditor()}
-            title={`Create a New Reply`}
-          >
-            <FontAwesomeIcon icon={['fas', 'plus']} size="lg" />
-            &nbsp; New Reply
-          </Button>
-        )}
-        {user?.privileges?.forum_comments_create &&
-          displayEditor?.comments === true && <CommentEditor topic={topic} />}
-        {user?.privileges?.forum_comments_view &&
-        collection &&
-        collection?.map &&
-        collection.length > 0 ? (
-          <Row className="mt-3">
-            <Col>
-              <Card>
-                {collection.map((comment, index) => {
-                  const {
-                    _key,
-                    created,
-                    email,
-                    text,
-                    updated,
-                    userId
-                  } = comment;
-                  const cUser = comment.user;
-                  let officeSymbol;
-                  if (!cUser?.section) {
-                    if (!cUser?.flight) {
-                      officeSymbol = cUser?.org;
-                    } else {
-                      officeSymbol = cUser?.flight;
-                    }
-                  } else {
-                    officeSymbol = cUser?.section;
-                  }
-                  return (
+        {!loading ? (
+          <Fragment>
+            <Breadcrumbs base={null} links={links} active={topic.title} />
+            <h2>{forum.title} Forum</h2>
+            <Alert variant="info">{forum.description}</Alert>
+            {user?.privileges?.forums_update && (
+              <Button
+                variant="primary"
+                size="sm"
+                className="mr-2 mt-2 rounded-pill"
+                href="/admin/forum"
+                title={`Forum Admin`}
+              >
+                <FontAwesomeIcon icon={['fas', 'th-list']} size="lg" />
+                &nbsp; Forum Admin
+              </Button>
+            )}
+            <Row className="mt-3">
+              <Col>
+                <Card>
+                  {topic && (
                     <Fragment>
-                      <Card.Body key={`comments_${_key}`}>
-                        <Card.Header>
-                          RE: {title}{' '}
-                          {user?.privileges?.forum_comments_update &&
+                      <Card.Body>
+                        <Card.Header as="h3">
+                          {title}{' '}
+                          {user?.privileges?.forum_topics_update &&
                             userId === user.id && (
                               <Button
                                 variant="success"
                                 size="sm"
                                 className="mr-2 rounded-circle float-right"
-                                onClick={() => this.commentEditor(_key)}
-                                title={`Edit Comment ${title}`}
+                                onClick={() => this.topicEditor(_key)}
+                                title={`Edit Topic ${title}`}
                               >
                                 <FontAwesomeIcon
                                   icon={['fas', 'edit']}
@@ -317,13 +185,13 @@ export class ForumTopic extends Component {
                                 />
                               </Button>
                             )}{' '}
-                          {user?.privileges?.forum_comments_delete && (
+                          {user?.privileges?.forum_topics_delete && (
                             <Button
                               variant="danger"
                               size="sm"
                               className="mr-2 rounded-circle float-right"
-                              onClick={() => this.deleteCommentEditor(_key)}
-                              title={`Delete Comment ${title}`}
+                              onClick={() => this.deleteTopicEditor(_key)}
+                              title={`Delete Topic ${title}`}
                             >
                               <FontAwesomeIcon
                                 icon={['fas', 'trash-alt']}
@@ -342,9 +210,9 @@ export class ForumTopic extends Component {
                             >
                               <Card.Text>
                                 by{' '}
-                                {cUser?.profile?.name
-                                  ? cUser?.profile?.name.first
-                                  : cUser?.username}{' '}
+                                {topicUser?.profile?.name
+                                  ? topicUser?.profile?.name
+                                  : topicUser?.username}{' '}
                                 » {this.displayDate(created)} »{' '}
                                 {this.displayTime(created)}
                                 {updated && (
@@ -369,17 +237,16 @@ export class ForumTopic extends Component {
                               <Container fluid>
                                 <Row>
                                   <Col>
-                                    <img
-                                      src={this.gravatar(email)}
-                                      alt="Gravatar"
-                                    />
+                                    {email && (
+                                      <img
+                                        src={this.gravatar(email)}
+                                        alt="Gravatar"
+                                      />
+                                    )}
                                     <p className="font-weight-bold text-primary">
-                                      {cUser?.profile?.name
-                                        ? cUser?.profile?.name
-                                        : cUser?.username}
-                                    </p>
-                                    <p className="text-uppercase">
-                                      {officeSymbol}
+                                      {topicUser?.profile?.name
+                                        ? topicUser?.profile?.name
+                                        : topicUser?.username}
                                     </p>
                                   </Col>
                                 </Row>
@@ -388,39 +255,191 @@ export class ForumTopic extends Component {
                           </Row>
                         </Container>
                       </Card.Body>
-                      {user?.privileges?.forum_comments_update &&
+                      {user?.privileges?.forum_topics_update &&
                         userId === user.id &&
-                        displayEditor?.comment === _key && (
-                          <CommentEditor
-                            topicForum={forum}
-                            topic={topic}
-                            comment={comment}
-                          />
+                        displayEditor?.topic === _key && (
+                          <TopicEditor topicForum={forum} topic={topic} />
                         )}
-                      {user?.privileges?.forum_comments_delete &&
-                        displayEditor?.deleteComment === _key && (
-                          <DeleteCommentEditor
-                            topicForum={forum}
-                            topic={topic}
-                            comment={comment}
-                          />
+                      {user?.privileges?.forum_topics_delete &&
+                        displayEditor?.deleteTopic === _key && (
+                          <DeleteTopicEditor topicForum={forum} topic={topic} />
                         )}
                     </Fragment>
-                  );
-                })}
-              </Card>
-            </Col>
-          </Row>
-        ) : (
-          <Container className="mt-3 text-center" fluid>
-            <Row>
-              <Col>
-                <Card>
-                  <h5 className="mt-1">No Replies Have Been Posted</h5>
+                  )}
                 </Card>
               </Col>
             </Row>
-          </Container>
+            {user?.privileges?.forum_topics_create && !displayEditor?.comments && (
+              <Button
+                variant="success"
+                size="sm"
+                className="mr-2 mt-2 rounded-pill"
+                onClick={() => this.commentsEditor()}
+                title={`Create a New Reply`}
+              >
+                <FontAwesomeIcon icon={['fas', 'plus']} size="lg" />
+                &nbsp; New Reply
+              </Button>
+            )}
+            {user?.privileges?.forum_comments_create &&
+              displayEditor?.comments === true && (
+                <CommentEditor topic={topic} />
+              )}
+            {user?.privileges?.forum_comments_view &&
+            collection &&
+            collection?.map &&
+            collection.length > 0 ? (
+              <Row className="mt-3">
+                <Col>
+                  <Card>
+                    {collection.map((comment, index) => {
+                      const {
+                        _key,
+                        created,
+                        email,
+                        text,
+                        updated,
+                        userId
+                      } = comment;
+                      const cUser = comment.user;
+                      let officeSymbol;
+                      if (!cUser?.section) {
+                        if (!cUser?.flight) {
+                          officeSymbol = cUser?.org;
+                        } else {
+                          officeSymbol = cUser?.flight;
+                        }
+                      } else {
+                        officeSymbol = cUser?.section;
+                      }
+                      return (
+                        <Fragment>
+                          <Card.Body key={`comments_${_key}`}>
+                            <Card.Header>
+                              RE: {title}{' '}
+                              {user?.privileges?.forum_comments_update &&
+                                userId === user.id && (
+                                  <Button
+                                    variant="success"
+                                    size="sm"
+                                    className="mr-2 rounded-circle float-right"
+                                    onClick={() => this.commentEditor(_key)}
+                                    title={`Edit Comment ${title}`}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={['fas', 'edit']}
+                                      size="1x"
+                                    />
+                                  </Button>
+                                )}{' '}
+                              {user?.privileges?.forum_comments_delete && (
+                                <Button
+                                  variant="danger"
+                                  size="sm"
+                                  className="mr-2 rounded-circle float-right"
+                                  onClick={() => this.deleteCommentEditor(_key)}
+                                  title={`Delete Comment ${title}`}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={['fas', 'trash-alt']}
+                                    size="1x"
+                                  />
+                                </Button>
+                              )}
+                            </Card.Header>
+                            <Container fluid>
+                              <Row>
+                                <Col
+                                  className="border border-secondary"
+                                  sm="8"
+                                  md="6"
+                                  lg="8"
+                                >
+                                  <Card.Text>
+                                    by{' '}
+                                    {cUser?.profile?.name
+                                      ? cUser?.profile?.name.first
+                                      : cUser?.username}{' '}
+                                    » {this.displayDate(created)} »{' '}
+                                    {this.displayTime(created)}
+                                    {updated && (
+                                      <Fragment>
+                                        {' '}
+                                        « Updated: {this.displayDate(
+                                          updated
+                                        )} « {this.displayTime(updated)}
+                                      </Fragment>
+                                    )}
+                                  </Card.Text>
+                                  <div className="mb-3 text-break h5">
+                                    {
+                                      unified()
+                                        .use(parse)
+                                        .use(remark2react)
+                                        .processSync(text).result
+                                    }
+                                  </div>
+                                </Col>
+                                <Col className="border border-secondary">
+                                  <Container fluid>
+                                    <Row>
+                                      <Col>
+                                        <img
+                                          src={this.gravatar(email)}
+                                          alt="Gravatar"
+                                        />
+                                        <p className="font-weight-bold text-primary">
+                                          {cUser?.profile?.name
+                                            ? cUser?.profile?.name
+                                            : cUser?.username}
+                                        </p>
+                                        <p className="text-uppercase">
+                                          {officeSymbol}
+                                        </p>
+                                      </Col>
+                                    </Row>
+                                  </Container>
+                                </Col>
+                              </Row>
+                            </Container>
+                          </Card.Body>
+                          {user?.privileges?.forum_comments_update &&
+                            userId === user.id &&
+                            displayEditor?.comment === _key && (
+                              <CommentEditor
+                                topicForum={forum}
+                                topic={topic}
+                                comment={comment}
+                              />
+                            )}
+                          {user?.privileges?.forum_comments_delete &&
+                            displayEditor?.deleteComment === _key && (
+                              <DeleteCommentEditor
+                                topicForum={forum}
+                                topic={topic}
+                                comment={comment}
+                              />
+                            )}
+                        </Fragment>
+                      );
+                    })}
+                  </Card>
+                </Col>
+              </Row>
+            ) : (
+              <Container className="mt-3 text-center" fluid>
+                <Row>
+                  <Col>
+                    <Card>
+                      <h5 className="mt-1">No Replies Have Been Posted</h5>
+                    </Card>
+                  </Col>
+                </Row>
+              </Container>
+            )}
+          </Fragment>
+        ) : (
+          <Loading />
         )}
       </Container>
     );
@@ -431,6 +450,7 @@ const mapStateToProps = (state) => ({
   collection: getComments(state),
   displayEditor: getEditorStatus(state),
   forum: getForum(state),
+  loading: getForumLoading(state),
   loggedIn: isLoggedIn(state),
   topic: getTopic(state),
   user: getCurrentUser(state)

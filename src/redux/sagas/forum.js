@@ -3,16 +3,15 @@ import helper from 'utils/saga';
 import request from 'utils/request';
 import { actions, types } from 'redux/reducers/forum';
 
-// snake_cased variables here come from RFC 6749
 function* requestForumWorker({ forum: { name } }) {
   try {
+    yield put(actions.requestForumLoading(true));
     const endpoint = {
       url: `/bb/forum/name/${name}`,
       method: 'GET'
     };
     const result = yield call(request.execute, { endpoint });
 
-    // update user in state or throw an error
     if (result.success) {
       const {
         response: { data }
@@ -34,6 +33,7 @@ function* requestForumWorker({ forum: { name } }) {
 
 function* requestForumsWorker({ forum: { parent } }) {
   try {
+    yield put(actions.requestForumLoading(true));
     let url;
     if (parent) {
       url =
@@ -47,10 +47,9 @@ function* requestForumsWorker({ forum: { parent } }) {
       url,
       method: 'GET'
     };
-    console.log(parent);
+
     const result = yield call(request.execute, { endpoint });
 
-    // update user in state or throw an error
     if (result.success) {
       const {
         response: { data }
@@ -72,6 +71,7 @@ function* requestForumsWorker({ forum: { parent } }) {
 
 function* requestSubforumsWorker({ forum: { parent } }) {
   try {
+    yield put(actions.requestForumLoading(true));
     let url;
     if (parent) {
       url =
@@ -85,10 +85,9 @@ function* requestSubforumsWorker({ forum: { parent } }) {
       url,
       method: 'GET'
     };
-    console.log(parent);
+
     const result = yield call(request.execute, { endpoint });
 
-    // update user in state or throw an error
     if (result.success) {
       const {
         response: { data }
@@ -108,9 +107,9 @@ function* requestSubforumsWorker({ forum: { parent } }) {
   }
 }
 
-// snake_cased variables here come from RFC 6749
 function* requestForumTopicsWorker({ forum: { _key, name } }) {
   try {
+    yield put(actions.requestForumLoading(true));
     const endpoint = {
       url: _key
         ? `/bb/forum/id/${_key}/topics`
@@ -119,7 +118,6 @@ function* requestForumTopicsWorker({ forum: { _key, name } }) {
     };
     const result = yield call(request.execute, { endpoint });
 
-    // update user in state or throw an error
     if (result.success) {
       const {
         response: { data }
@@ -139,16 +137,15 @@ function* requestForumTopicsWorker({ forum: { _key, name } }) {
   }
 }
 
-// snake_cased variables here come from RFC 6749
 function* requestTopicWorker({ topic: { _key } }) {
   try {
+    yield put(actions.requestForumLoading(true));
     const endpoint = {
       url: `/bb/topic/${_key}`,
       method: 'GET'
     };
     const result = yield call(request.execute, { endpoint });
 
-    // update user in state or throw an error
     if (result.success) {
       const {
         response: { data }
@@ -167,16 +164,15 @@ function* requestTopicWorker({ topic: { _key } }) {
   }
 }
 
-// snake_cased variables here come from RFC 6749
 function* requestTopicCommentsWorker({ topic: { _key } }) {
   try {
+    yield put(actions.requestForumLoading(true));
     const endpoint = {
       url: `/bb/topic/${_key}/comments`,
       method: 'GET'
     };
     const result = yield call(request.execute, { endpoint });
 
-    // update user in state or throw an error
     if (result.success) {
       const {
         response: { data }
@@ -521,10 +517,10 @@ function* metaAddViewWorker({ details: { topic } }) {
   }
 }
 
-function* metaDeleteTopicWorker({ details: { forum } }) {
+function* metaDeleteTopicWorker({ details: { forum, replies } }) {
   try {
     const endpoint = {
-      url: `/bb/forum-meta/delete-topic/forum/${forum}`,
+      url: `/bb/forum-meta/delete-topic/forum/${forum}/?replies=${replies}`,
       method: 'GET'
     };
 

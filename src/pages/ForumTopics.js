@@ -12,8 +12,14 @@ import { actions as editorActions } from 'redux/reducers/editor';
 import { actions as forumActions } from 'redux/reducers/forum';
 import { getCurrentUser, isLoggedIn } from 'redux/selectors/auth';
 import { getEditorStatus } from 'redux/selectors/editor';
-import { getForum, getForums, getTopics } from 'redux/selectors/forum';
+import {
+  getForum,
+  getForumLoading,
+  getForums,
+  getTopics
+} from 'redux/selectors/forum';
 import TopicEditor from 'components/Forum/TopicEditor';
+import Loading from 'components/Loading';
 
 export class ForumTopics extends Component {
   static propTypes = {
@@ -22,19 +28,16 @@ export class ForumTopics extends Component {
     displayEditor: PropTypes.object,
     forum: PropTypes.object,
     forums: PropTypes.array,
+    loading: PropTypes.bool,
     loggedIn: PropTypes.bool.isRequired,
     match: PropTypes.object,
     user: PropTypes.object
   };
+
   constructor(props) {
     super(props);
-    const {
-      match: {
-        params: { name }
-      }
-    } = this.props;
 
-    this.state = { links: [{ name: 'Forum', url: '/forum' }], active: name };
+    this.state = { links: [{ name: 'Forum', url: '/forum' }], active: '' };
   }
 
   componentDidMount() {
@@ -98,236 +101,267 @@ export class ForumTopics extends Component {
   }
 
   render() {
-    const { collection, displayEditor, forum, forums, user } = this.props;
-    const { active, links } = this.state;
+    const {
+      collection,
+      displayEditor,
+      forum,
+      forums,
+      loading,
+      user
+    } = this.props;
+    const { links } = this.state;
+    const active = forum?.title;
     return (
       <Container fluid>
         <Helmet title={`${forum.title} Forum`} />
         <h1>Forum</h1>
-        <Breadcrumbs base={null} links={links} active={active} />
-        <h2>{forum.title} Forum</h2>
-        <Alert variant="info">
-          {forum?.options?.adminOnly && (
-            <Fragment>
-              <FontAwesomeIcon
-                icon={['fas', 'lock']}
-                size="2x"
-                className="text-light"
-                title="Topics Locked to Admins Only"
-              />
-              &nbsp; &nbsp;
-            </Fragment>
-          )}
-          {forum.description}
-        </Alert>
-        {user?.privileges?.forums_view &&
-          forums &&
-          forums?.map &&
-          forums?.length > 0 && (
-            <Fragment>
-              {forums.map((subforum, index) => {
-                const {
-                  _key,
-                  description,
-                  icon,
-                  name,
-                  title,
-                  topics,
-                  replies
-                } = subforum;
-                return (
-                  <Row className="mt-3">
-                    <Col>
-                      <Card key={`forums_${_key}`}>
-                        <Card.Header>
-                          <Link to={`/forum/${name}`}>{title}</Link>
-                        </Card.Header>
+        {!loading ? (
+          <Fragment>
+            <Breadcrumbs base={null} links={links} active={active} />
+            <h2>{forum.title} Forum</h2>
+            <Alert variant="info">
+              {forum?.options?.adminOnly && (
+                <Fragment>
+                  <FontAwesomeIcon
+                    icon={['fas', 'lock']}
+                    size="2x"
+                    className="text-light"
+                    title="Topics Locked to Admins Only"
+                  />
+                  &nbsp; &nbsp;
+                </Fragment>
+              )}
+              {forum.description}
+            </Alert>
+            {user?.privileges?.forums_view &&
+              forums &&
+              forums?.map &&
+              forums?.length > 0 && (
+                <Fragment>
+                  {forums.map((subforum, index) => {
+                    const {
+                      _key,
+                      description,
+                      icon,
+                      name,
+                      title,
+                      topics,
+                      replies
+                    } = subforum;
+                    return (
+                      <Row className="mt-3">
+                        <Col>
+                          <Card key={`forums_${_key}`}>
+                            <Card.Header>
+                              <Link to={`/forum/${name}`}>{title}</Link>
+                            </Card.Header>
 
-                        <Card.Body>
-                          <Container fluid>
-                            <Row>
-                              <Col
-                                className="mt-auto mb-auto"
-                                sm="auto"
-                                md="auto"
-                                lg="1"
-                              >
-                                <span className="fa-layers fa-2x fa-fw">
-                                  <FontAwesomeIcon
-                                    icon={['fas', 'circle']}
-                                    transform="grow-12"
-                                    className="text-light"
-                                  />
-                                  <FontAwesomeIcon icon={['fas', icon]} />
-                                </span>
-                              </Col>
-                              <Col
-                                className="mt-auto mb-auto"
-                                sm="8"
-                                md="6"
-                                lg="8"
-                              >
-                                {description}
-                              </Col>
-                              <Col>
-                                <Container fluid>
-                                  <Row>
-                                    <Col>
-                                      <h5>Topics</h5>
-                                      <h4 className="text-primary">{topics}</h4>
-                                    </Col>
-                                    <Col>
-                                      <h5>Replies</h5>
-                                      <h4 className="text-primary">
-                                        {replies}
-                                      </h4>
-                                    </Col>
-                                  </Row>
-                                </Container>
-                              </Col>
-                            </Row>
-                          </Container>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                );
-              })}
-            </Fragment>
-          )}
-        {!displayEditor?.topics && (
-          <Fragment>
-            {!forum?.options?.adminOnly &&
-              user?.privileges?.forum_topics_create && (
-                <Button
-                  size="sm"
-                  className="mr-3 mt-3 rounded-pill"
-                  onClick={() => this.topicsEditor()}
-                  title={`Create a New Topic`}
-                >
-                  <FontAwesomeIcon icon={['fas', 'plus']} size="lg" />
-                  &nbsp; New Topic
-                </Button>
-              )}
-            {forum?.options?.adminOnly &&
-              user?.privileges?.forum_topics_create_locked && (
-                <Button
-                  size="sm"
-                  className="mr-3 mt-3 rounded-pill"
-                  onClick={() => this.topicsEditor()}
-                  title={`Create a New Topic`}
-                >
-                  <FontAwesomeIcon icon={['fas', 'plus']} size="lg" />
-                  &nbsp; New Topic
-                </Button>
-              )}
-          </Fragment>
-        )}
-        {user?.privileges?.forums_update && (
-          <Button
-            variant="primary"
-            size="sm"
-            className="mr-3 mt-3 rounded-pill"
-            href="/admin/forum"
-            title={`Forum Admin`}
-          >
-            <FontAwesomeIcon icon={['fas', 'th-list']} size="lg" />
-            &nbsp; Forum Admin
-          </Button>
-        )}
-        {user?.privileges?.forum_topics_create &&
-          displayEditor?.topics === true && <TopicEditor topicForum={forum} />}
-        {user?.privileges?.forum_topics_view &&
-        collection &&
-        collection?.map &&
-        collection.length > 0 ? (
-          <Fragment>
-            {collection.map((topic, index) => {
-              const { _key, created, replies, title, updated, views } = topic;
-              const topicUser = topic.user;
-              return (
-                <Row className="mt-3" key={`topics_${_key}`}>
-                  <Col>
-                    <Card>
-                      <Card.Body>
-                        <Container fluid>
-                          <Row>
-                            <Col
-                              className="mt-auto mb-auto"
-                              sm="auto"
-                              md="auto"
-                              lg="1"
-                            >
-                              <span className="fa-layers fa-2x fa-fw">
-                                <FontAwesomeIcon
-                                  icon={['fas', 'circle']}
-                                  transform="grow-12"
-                                  className="text-light"
-                                />
-                                <FontAwesomeIcon icon={['fas', 'align-left']} />
-                              </span>
-                            </Col>
-                            <Col
-                              className="mt-auto mb-auto"
-                              sm="8"
-                              md="6"
-                              lg="8"
-                            >
-                              <Card.Title>
-                                <Link to={`/forum/${forum.name}/${_key}`}>
-                                  {title}
-                                </Link>
-                              </Card.Title>
-                              <Card.Text>
-                                by{' '}
-                                {topicUser?.profile?.name
-                                  ? topicUser?.profile?.name
-                                  : user?.name}{' '}
-                                » {this.displayDate(created)} »{' '}
-                                {this.displayTime(created)}
-                                {updated && (
-                                  <Fragment>
-                                    {' '}
-                                    « Updated: {this.displayDate(
-                                      updated
-                                    )} « {this.displayTime(updated)}
-                                  </Fragment>
-                                )}
-                              </Card.Text>
-                            </Col>
-                            <Col>
+                            <Card.Body>
                               <Container fluid>
                                 <Row>
-                                  <Col>
-                                    <h5>Views</h5>
-                                    <h4 className="text-primary">{views}</h4>
+                                  <Col
+                                    className="mt-auto mb-auto"
+                                    sm="auto"
+                                    md="auto"
+                                    lg="1"
+                                  >
+                                    <span className="fa-layers fa-2x fa-fw">
+                                      <FontAwesomeIcon
+                                        icon={['fas', 'circle']}
+                                        transform="grow-12"
+                                        className="text-light"
+                                      />
+                                      <FontAwesomeIcon icon={['fas', icon]} />
+                                    </span>
+                                  </Col>
+                                  <Col
+                                    className="mt-auto mb-auto"
+                                    sm="8"
+                                    md="6"
+                                    lg="8"
+                                  >
+                                    {description}
                                   </Col>
                                   <Col>
-                                    <h5>Replies</h5>
-                                    <h4 className="text-primary">{replies}</h4>
+                                    <Container fluid>
+                                      <Row>
+                                        <Col>
+                                          <h5>Topics</h5>
+                                          <h4 className="text-primary">
+                                            {topics}
+                                          </h4>
+                                        </Col>
+                                        <Col>
+                                          <h5>Replies</h5>
+                                          <h4 className="text-primary">
+                                            {replies}
+                                          </h4>
+                                        </Col>
+                                      </Row>
+                                    </Container>
                                   </Col>
                                 </Row>
                               </Container>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </Card.Body>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      </Row>
+                    );
+                  })}
+                </Fragment>
+              )}
+            {!displayEditor?.topics && (
+              <Fragment>
+                {!forum?.options?.adminOnly &&
+                  user?.privileges?.forum_topics_create && (
+                    <Button
+                      size="sm"
+                      className="mr-3 mt-3 rounded-pill"
+                      onClick={() => this.topicsEditor()}
+                      title={`Create a New Topic`}
+                    >
+                      <FontAwesomeIcon icon={['fas', 'plus']} size="lg" />
+                      &nbsp; New Topic
+                    </Button>
+                  )}
+                {forum?.options?.adminOnly &&
+                  user?.privileges?.forum_topics_create_locked && (
+                    <Button
+                      size="sm"
+                      className="mr-3 mt-3 rounded-pill"
+                      onClick={() => this.topicsEditor()}
+                      title={`Create a New Topic`}
+                    >
+                      <FontAwesomeIcon icon={['fas', 'plus']} size="lg" />
+                      &nbsp; New Topic
+                    </Button>
+                  )}
+              </Fragment>
+            )}
+            {user?.privileges?.forums_update && (
+              <Button
+                variant="primary"
+                size="sm"
+                className="mr-3 mt-3 rounded-pill"
+                href="/admin/forum"
+                title={`Forum Admin`}
+              >
+                <FontAwesomeIcon icon={['fas', 'th-list']} size="lg" />
+                &nbsp; Forum Admin
+              </Button>
+            )}
+            {user?.privileges?.forum_topics_create &&
+              displayEditor?.topics === true && (
+                <TopicEditor topicForum={forum} />
+              )}
+            {user?.privileges?.forum_topics_view &&
+            collection &&
+            collection?.map &&
+            collection.length > 0 ? (
+              <Fragment>
+                {collection.map((topic, index) => {
+                  const {
+                    _key,
+                    created,
+                    replies,
+                    title,
+                    updated,
+                    views
+                  } = topic;
+                  const topicUser = topic.user;
+                  return (
+                    <Row className="mt-3" key={`topics_${_key}`}>
+                      <Col>
+                        <Card>
+                          <Card.Body>
+                            <Container fluid>
+                              <Row>
+                                <Col
+                                  className="mt-auto mb-auto"
+                                  sm="auto"
+                                  md="auto"
+                                  lg="1"
+                                >
+                                  <span className="fa-layers fa-2x fa-fw">
+                                    <FontAwesomeIcon
+                                      icon={['fas', 'circle']}
+                                      transform="grow-12"
+                                      className="text-light"
+                                    />
+                                    <FontAwesomeIcon
+                                      icon={['fas', 'align-left']}
+                                    />
+                                  </span>
+                                </Col>
+                                <Col
+                                  className="mt-auto mb-auto"
+                                  sm="8"
+                                  md="6"
+                                  lg="8"
+                                >
+                                  <Card.Title>
+                                    <Link to={`/forum/${forum.name}/${_key}`}>
+                                      {title}
+                                    </Link>
+                                  </Card.Title>
+                                  <Card.Text>
+                                    by{' '}
+                                    {topicUser?.profile?.name
+                                      ? topicUser?.profile?.name
+                                      : user?.name}{' '}
+                                    » {this.displayDate(created)} »{' '}
+                                    {this.displayTime(created)}
+                                    {updated && (
+                                      <Fragment>
+                                        {' '}
+                                        « Updated: {this.displayDate(
+                                          updated
+                                        )} « {this.displayTime(updated)}
+                                      </Fragment>
+                                    )}
+                                  </Card.Text>
+                                </Col>
+                                <Col>
+                                  <Container fluid>
+                                    <Row>
+                                      <Col>
+                                        <h5>Views</h5>
+                                        <h4 className="text-primary">
+                                          {views}
+                                        </h4>
+                                      </Col>
+                                      <Col>
+                                        <h5>Replies</h5>
+                                        <h4 className="text-primary">
+                                          {replies}
+                                        </h4>
+                                      </Col>
+                                    </Row>
+                                  </Container>
+                                </Col>
+                              </Row>
+                            </Container>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
+                  );
+                })}
+              </Fragment>
+            ) : (
+              <Container className="mt-3 text-center" fluid>
+                <Row>
+                  <Col>
+                    <Card>
+                      <h5 className="mt-1">No Topics Have Been Posted</h5>
                     </Card>
                   </Col>
                 </Row>
-              );
-            })}
+              </Container>
+            )}
           </Fragment>
         ) : (
-          <Container className="mt-3 text-center" fluid>
-            <Row>
-              <Col>
-                <Card>
-                  <h5 className="mt-1">No Topics Have Been Posted</h5>
-                </Card>
-              </Col>
-            </Row>
-          </Container>
+          <Loading />
         )}
       </Container>
     );
@@ -339,6 +373,7 @@ const mapStateToProps = (state) => ({
   displayEditor: getEditorStatus(state),
   forum: getForum(state),
   forums: getForums(state),
+  loading: getForumLoading(state),
   loggedIn: isLoggedIn(state),
   user: getCurrentUser(state)
 });

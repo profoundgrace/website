@@ -19,11 +19,11 @@ export class DeleteTopicEditor extends Component {
     topic: PropTypes.object,
     loggedIn: PropTypes.bool.isRequired,
     match: PropTypes.object,
-    user: PropTypes.object,
+    user: PropTypes.object
   };
   static defaultProps = {
     topicForum: {},
-    topic: {},
+    topic: {}
   };
 
   constructor(props) {
@@ -43,13 +43,13 @@ export class DeleteTopicEditor extends Component {
 
     actions.displayEditor({ editor: 'deleteTopic', status: false });
     actions.deleteTopic(values);
-    actions.metaDeleteTopic({ forum: values.forum });
+    actions.metaDeleteTopic({ forum: values.forum, replies: values.replies });
   }
 
   render() {
     const { topicForum, topic, user } = this.props;
 
-    const { _key, forum } = topic;
+    const { _key, forum, replies } = topic;
 
     return (
       <Col className="mt-3">
@@ -61,6 +61,7 @@ export class DeleteTopicEditor extends Component {
               initialValues={{
                 topic: _key || null,
                 forum: forum || topicForum._key,
+                replies
               }}
               render={({ handleSubmit, submitting, values }) => (
                 <Form noValidate onSubmit={handleSubmit}>
@@ -71,6 +72,11 @@ export class DeleteTopicEditor extends Component {
                       )}
                     </Field>
                     <Field name="forum">
+                      {({ input, meta }) => (
+                        <Form.Control {...input} type="hidden" />
+                      )}
+                    </Field>
+                    <Field name="replies">
                       {({ input, meta }) => (
                         <Form.Control {...input} type="hidden" />
                       )}
@@ -118,7 +124,7 @@ export class DeleteTopicEditor extends Component {
 const mapStateToProps = (state) => ({
   displayEditor: getEditorStatus(state),
   loggedIn: isLoggedIn(state),
-  user: getCurrentUser(state),
+  user: getCurrentUser(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -126,10 +132,10 @@ const mapDispatchToProps = (dispatch) => ({
     {
       ...authActions,
       ...editorActions,
-      ...forumActions,
+      ...forumActions
     },
     dispatch
-  ),
+  )
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeleteTopicEditor);
