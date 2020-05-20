@@ -6,7 +6,15 @@ import unified from 'unified';
 import parse from 'remark-parse';
 import remark2react from 'remark-react';
 import { Form as FinalForm, Field } from 'react-final-form';
-import { Alert, Button, ButtonGroup, Card, Col, Form } from 'react-bootstrap';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Col,
+  Form,
+  OverlayTrigger,
+  Popover
+} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { actions as authActions } from 'redux/reducers/auth';
 import { actions as editorActions } from 'redux/reducers/editor';
@@ -23,11 +31,11 @@ export class TopicEditor extends Component {
     topic: PropTypes.object,
     loggedIn: PropTypes.bool.isRequired,
     match: PropTypes.object,
-    user: PropTypes.object,
+    user: PropTypes.object
   };
   static defaultProps = {
     topicForum: {},
-    topic: {},
+    topic: {}
   };
 
   constructor(props) {
@@ -54,6 +62,25 @@ export class TopicEditor extends Component {
     }
   }
 
+  get textInfo() {
+    return (
+      <Popover>
+        <Popover.Title as="h3">Markdown</Popover.Title>
+        <Popover.Content>
+          This content supports{' '}
+          <a
+            href="https://daringfireball.net/projects/markdown/syntax"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Markdown
+          </a>
+          , if you don't want to just use plain text.
+        </Popover.Content>
+      </Popover>
+    );
+  }
+
   render() {
     const { topicForum, topic, user } = this.props;
 
@@ -66,7 +93,7 @@ export class TopicEditor extends Component {
       text,
       title,
       userId,
-      views,
+      views
     } = topic;
 
     const update = Boolean(topic?._key);
@@ -90,7 +117,7 @@ export class TopicEditor extends Component {
                 title: title || null,
                 userId: userId || user.id,
                 views: views || 0,
-                update,
+                update
               }}
               render={({ handleSubmit, submitting, values }) => (
                 <Form noValidate onSubmit={handleSubmit}>
@@ -117,7 +144,20 @@ export class TopicEditor extends Component {
                     <Field name="text" validate={composeValidators(required)}>
                       {({ input, meta }) => (
                         <Form.Group as={Col} sm="12" md="4">
-                          <Form.Label>Topic Text</Form.Label>
+                          <Form.Label>
+                            Topic Text{' '}
+                            <OverlayTrigger
+                              trigger="click"
+                              placement="right"
+                              overlay={this.textInfo}
+                            >
+                              <FontAwesomeIcon
+                                className="text-info"
+                                icon={['fas', 'info-circle']}
+                                size="1x"
+                              />
+                            </OverlayTrigger>
+                          </Form.Label>
                           <Form.Control
                             {...input}
                             as="textarea"
@@ -133,25 +173,12 @@ export class TopicEditor extends Component {
                       )}
                     </Field>
                   </Form.Row>
-                  <Alert variant="light" className="text-primary">
-                    <h6>
-                      This forum supports{' '}
-                      <a
-                        href="https://daringfireball.net/projects/markdown/syntax"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Markdown
-                      </a>
-                      , if you don't want to just use plain text.
-                    </h6>
-                  </Alert>
                   <h6>Preview:</h6>
                   <Form.Row>
                     <Col
                       sm="12"
                       md="4"
-                      className="p-3 border border-light text-break h5"
+                      className="p-3 border border-light text-break"
                     >
                       {
                         unified()
@@ -230,7 +257,7 @@ export class TopicEditor extends Component {
 const mapStateToProps = (state) => ({
   displayEditor: getEditorStatus(state),
   loggedIn: isLoggedIn(state),
-  user: getCurrentUser(state),
+  user: getCurrentUser(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -238,10 +265,10 @@ const mapDispatchToProps = (dispatch) => ({
     {
       ...authActions,
       ...editorActions,
-      ...forumActions,
+      ...forumActions
     },
     dispatch
-  ),
+  )
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopicEditor);
