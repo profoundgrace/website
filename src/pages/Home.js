@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button, Col, Container, Jumbotron, Row } from 'react-bootstrap';
 import LatestArticles from 'components/Articles/Latest';
+import LatestTopics from 'components/Forum/Latest';
 
 class Home extends Component {
   render() {
@@ -28,6 +29,9 @@ class Home extends Component {
         <Row>
           <Col>
             <LatestArticles />
+          </Col>
+          <Col>
+            <LatestTopics />
           </Col>
         </Row>
       </Container>

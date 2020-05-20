@@ -224,7 +224,7 @@ export class ForumTopic extends Component {
                                   </Fragment>
                                 )}
                               </Card.Text>
-                              <div className="mb-3 text-break h5">
+                              <div className="mb-3 text-break">
                                 {
                                   unified()
                                     .use(parse)
@@ -371,7 +371,7 @@ export class ForumTopic extends Component {
                                       </Fragment>
                                     )}
                                   </Card.Text>
-                                  <div className="mb-3 text-break h5">
+                                  <div className="mb-3 text-break">
                                     {
                                       unified()
                                         .use(parse)

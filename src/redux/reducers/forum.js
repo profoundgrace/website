@@ -8,6 +8,7 @@ export const types = buildActions('forum', [
   'REQUEST_FORUM_TOPICS',
   'REQUEST_TOPIC',
   'REQUEST_TOPIC_COMMENTS',
+  'REQUEST_LATEST_TOPICS',
   'ADD_FORUM',
   'ADD_TOPIC',
   'ADD_COMMENT',
@@ -56,6 +57,11 @@ const requestTopic = (topic) => ({
 
 const requestTopicComments = (topic) => ({
   type: types.REQUEST_TOPIC_COMMENTS,
+  topic
+});
+
+const requestLatestTopics = (topic) => ({
+  type: types.REQUEST_LATEST_TOPICS,
   topic
 });
 
@@ -138,6 +144,7 @@ export const actions = {
   requestForumTopics,
   requestTopic,
   requestTopicComments,
+  requestLatestTopics,
   addForum,
   addTopic,
   addComment,
@@ -159,6 +166,8 @@ export const initialState = {
   children: [],
   collection: [],
   comments: [],
+  latestComments: [],
+  latestTopics: [],
   loading: false,
   forum: {},
   topic: {},

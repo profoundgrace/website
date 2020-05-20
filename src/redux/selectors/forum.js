@@ -39,7 +39,7 @@ export const getComments = createSelector(
 
 export const getLatestTopics = createSelector(
   getForumsSelector,
-  (forum) => forum.latest
+  (forum) => forum.latestTopics
 );
 
 export const getError = createSelector(

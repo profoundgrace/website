@@ -192,6 +192,35 @@ function* requestTopicCommentsWorker({ topic: { _key } }) {
   }
 }
 
+function* requestLatestTopicsWorker({ topic: { forum } }) {
+  try {
+    yield put(actions.requestForumLoading(true));
+    const endpoint = {
+      url: forum
+        ? `/bb/forum/${forum}/latest/topics/`
+        : `/bb/forum/latest/topics`,
+      method: 'GET'
+    };
+    const result = yield call(request.execute, { endpoint });
+
+    if (result.success) {
+      const {
+        response: { data }
+      } = result;
+      yield put(actions.requestSuccess({ reqType: 'latestTopics', data }));
+    } else if (result.error) {
+      throw result.error;
+    } else {
+      throw new Error('Failed to get topic!');
+    }
+  } catch (error) {
+    const { message } = error;
+
+    yield put(actions.requestFailure(error));
+    yield call(helper.errorToast, message);
+  }
+}
+
 function* addForumWorker({
   details: {
     _key,
@@ -589,6 +618,10 @@ function* requestTopicCommentsWatcher() {
   yield takeLatest(types.REQUEST_TOPIC_COMMENTS, requestTopicCommentsWorker);
 }
 
+function* requestLatestTopicsWatcher() {
+  yield takeLatest(types.REQUEST_LATEST_TOPICS, requestLatestTopicsWorker);
+}
+
 function* addForumWatcher() {
   yield takeLatest(types.ADD_FORUM, addForumWorker);
 }
@@ -640,6 +673,7 @@ export const workers = {
   requestForumTopicsWorker,
   requestTopicWorker,
   requestTopicCommentsWorker,
+  requestLatestTopicsWorker,
   addForumWorker,
   addTopicWorker,
   addCommentWorker,
@@ -660,6 +694,7 @@ export const watchers = {
   requestForumTopicsWatcher,
   requestTopicWatcher,
   requestTopicCommentsWatcher,
+  requestLatestTopicsWatcher,
   addForumWatcher,
   addTopicWatcher,
   addCommentWatcher,
