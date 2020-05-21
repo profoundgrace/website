@@ -313,8 +313,8 @@ export class ForumTopic extends Component {
                         officeSymbol = cUser?.section;
                       }
                       return (
-                        <Fragment>
-                          <Card.Body key={`comments_${_key}`}>
+                        <Fragment key={`comments_${_key}`}>
+                          <Card.Body>
                             <Card.Header>
                               RE: {title}{' '}
                               {user?.privileges?.forum_comments_update &&

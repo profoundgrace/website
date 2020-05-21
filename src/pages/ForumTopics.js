@@ -149,9 +149,9 @@ export class ForumTopics extends Component {
                       replies
                     } = subforum;
                     return (
-                      <Row className="mt-3">
+                      <Row className="mt-3" key={`forums_${_key}`}>
                         <Col>
-                          <Card key={`forums_${_key}`}>
+                          <Card>
                             <Card.Header>
                               <Link to={`/forum/${name}`}>{title}</Link>
                             </Card.Header>
