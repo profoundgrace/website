@@ -170,15 +170,16 @@ export class ArticleType extends Component {
                         articleType,
                         createdDate,
                         slug,
+                        summary,
                         text,
                         title,
                         updatedDate
                       } = article;
 
                       return (
-                        <Fragment>
+                        <Fragment key={`articles_${_key}`}>
                           {article?.status === '1' ? (
-                            <ListGroup variant="flush" key={`articles_${_key}`}>
+                            <ListGroup variant="flush">
                               <ListGroup.Item className="mb-2">
                                 <Row>
                                   <Col md="auto">
@@ -265,12 +266,12 @@ export class ArticleType extends Component {
                                 </Row>
                                 <Row>
                                   <Col className="pt-3">
-                                    {
-                                      unified()
-                                        .use(parse)
-                                        .use(remark2react)
-                                        .processSync(text).result
-                                    }
+                                    {summary
+                                      ? summary
+                                      : unified()
+                                          .use(parse)
+                                          .use(remark2react)
+                                          .processSync(text).result}
                                   </Col>
                                 </Row>
                               </ListGroup.Item>

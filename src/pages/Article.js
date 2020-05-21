@@ -189,7 +189,7 @@ export class Articles extends Component {
                     </Row>
                     <Row>
                       <Col className="pt-3">
-                        {options?.useSummary ? summary : null}
+                        {articleType?.options?.useSummary ? summary : null}
                         {
                           unified()
                             .use(parse)
