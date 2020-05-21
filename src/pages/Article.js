@@ -93,6 +93,8 @@ export class Articles extends Component {
       _key,
       articleType,
       createdDate,
+      options,
+      summary,
       text,
       title,
       updatedDate
@@ -187,6 +189,7 @@ export class Articles extends Component {
                     </Row>
                     <Row>
                       <Col className="pt-3">
+                        {options?.useSummary ? summary : null}
                         {
                           unified()
                             .use(parse)
